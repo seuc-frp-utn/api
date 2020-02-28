@@ -1,6 +1,9 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/seuc-frp-utn/api/users"
+)
 
 func registerRoutes(group *gin.RouterGroup) *gin.RouterGroup {
 	v1 := group.Group("/1.0")
@@ -13,9 +16,12 @@ func registerRoutes(group *gin.RouterGroup) *gin.RouterGroup {
 		})
 		//////////////////////////////////////////////////
 		//////////////////////////////////////////////////
-		users := v1.Group("/users")
+		groupUsers := v1.Group("/users")
 		{
-			users.GET("/")
+			groupUsers.GET("/", (*users.UserController).Read)
+			groupUsers.POST("/", (*users.UserController).Create)
+			groupUsers.PUT("/:uuid", (*users.UserController).Update)
+			groupUsers.DELETE("/:uuid", (*users.UserController).Remove)
 		}
 		//////////////////////////////////////////////////
 		//////////////////////////////////////////////////

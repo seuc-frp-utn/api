@@ -6,13 +6,13 @@ import (
 )
 
 var (
-	userController *application.IController
-	userService *application.IService
-	userRepository *application.IRepository
+	UserController *application.IController
+	UserService *application.IService
+	UserRepository *application.IRepository
 )
 
 func init() {
-	userRepository = NewRepository(database.Db)
-	userService = NewService(userRepository)
-	userController = NewController(userService)
+	UserRepository = NewRepository(database.Db)
+	UserService = NewService(UserRepository)
+	UserController = NewController(UserService)
 }
