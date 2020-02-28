@@ -1,7 +1,10 @@
 package application
 
-// IRepository represents a Repository interface to be used for data manipulation
+import "github.com/jinzhu/gorm"
+
 type IRepository interface {
+	GetDatabase() (*gorm.DB, error)
+	SetDatabase(db *gorm.DB) error
 	Create(entity interface{}) (interface{}, error)
 	Read(uuid string) (interface{}, error)
 	Update(uuid string, entity interface{}) (interface{}, error)
