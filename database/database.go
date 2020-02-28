@@ -4,12 +4,45 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"os"
+	"strconv"
 )
+
+var (
+	Db *gorm.DB
+)
+
+func init() {
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	pass := os.Getenv("DB_PASSWORD")
+	name := os.Getenv("DB_NAME")
+
+	var port int
+	var err error
+	if value, err := strconv.Atoi(os.Getenv("DB_PORT")); err == nil {
+		port = value
+	} else {
+		port = 5432
+	}
+
+	config := Config{
+		Host:     host,
+		Port:     port,
+		User:     user,
+		Password: pass,
+		Database: name,
+	}
+
+	if Db, err = New(config); err != nil {
+		panic("error setting database up")
+	}
+}
 
 // Config represents a set of parameter to configure a database.
 type Config struct {
 	Host string
-	Port uint
+	Port int
 	User string
 	Password string
 	Database string
