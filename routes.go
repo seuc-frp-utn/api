@@ -15,10 +15,12 @@ func registerRoutes(group *gin.RouterGroup) *gin.RouterGroup {
 			})
 		})
 		//////////////////////////////////////////////////
+		// Users routes
 		//////////////////////////////////////////////////
 		groupUsers := v1.Group("/users")
 		{
-			groupUsers.GET("/", (*users.UserController).Read)
+			groupUsers.GET("/:uuid", (*users.UserController).Read)
+			groupUsers.GET("/", (*users.UserController).ReadAll)
 			groupUsers.POST("/", (*users.UserController).Create)
 			groupUsers.PUT("/:uuid", (*users.UserController).Update)
 			groupUsers.DELETE("/:uuid", (*users.UserController).Remove)
