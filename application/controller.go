@@ -7,6 +7,7 @@ type IController interface {
 	SetService(service *IService) error
 	Create(ctx *gin.Context)
 	Read(ctx *gin.Context)
+	ReadAll(ctx *gin.Context)
 	Update(ctx *gin.Context)
 	Remove(ctx *gin.Context)
 }
