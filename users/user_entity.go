@@ -2,6 +2,7 @@ package users
 
 import (
 	"github.com/seuc-frp-utn/api/database"
+	"github.com/seuc-frp-utn/api/roles"
 	"time"
 )
 
@@ -13,6 +14,7 @@ type User struct {
 	Email string `json:"email" gorm:"unique"`
 	Birthday time.Time `json:"birthday"`
 	Password *string `json:"-,omitempty"`
+	Role roles.Role `json:"role"`
 }
 
 type UserCreate struct {
