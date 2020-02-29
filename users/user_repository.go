@@ -45,20 +45,36 @@ func (r Repository) Create(entity interface{}) (interface{}, error) {
 }
 
 func (r Repository) Read(uuid string) (interface{}, error) {
-	var result User
-	if err := r.db.Model(&User{}).First(&result).Where("uuid = ?", uuid).Error; err != nil {
+	var user User
+	if err := r.db.Model(&User{}).First(&user).Where("uuid = ?", uuid).Error; err != nil {
 		return nil, err
 	}
+	return &user, nil
 }
 
 func (r Repository) ReadAll() (interface{}, error) {
-	r.db.Find(&User{})
+	var users []User
+	if err := r.db.Model(&[]User{}).Find(users).Error; err != nil {
+		return nil, err
+	}
+	return &users, nil
 }
 
 func (r Repository) Update(uuid string, entity interface{}) (interface{}, error) {
-	panic("implement me")
+	user, ok := entity.(User)
+	if !ok {
+		return nil, errors.New("wrong format")
+	}
+	if err := r.db.Model(&User{}).Save(&user).Where("uuid = ?", uuid).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
 
 func (r Repository) Remove(uuid string) (interface{}, error) {
-	panic("implement me")
+	var user User
+	if err := r.db.Model(&User{}).First(&user).Where("uuid = ?").Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
