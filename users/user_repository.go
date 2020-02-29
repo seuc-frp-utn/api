@@ -31,11 +31,28 @@ func (r Repository) SetDatabase(db *gorm.DB) error {
 }
 
 func (r Repository) Create(entity interface{}) (interface{}, error) {
-	panic("implement me")
+	user, ok := entity.(User)
+	if !ok {
+		return nil, errors.New("wrong format")
+	}
+	if pk := r.db.NewRecord(user); pk {
+		return nil, errors.New("user already exists")
+	}
+	if err := r.db.Create(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
 
 func (r Repository) Read(uuid string) (interface{}, error) {
-	panic("implement me")
+	var result User
+	if err := r.db.Model(&User{}).First(&result).Where("uuid = ?", uuid).Error; err != nil {
+		return nil, err
+	}
+}
+
+func (r Repository) ReadAll() (interface{}, error) {
+	r.db.Find(&User{})
 }
 
 func (r Repository) Update(uuid string, entity interface{}) (interface{}, error) {
