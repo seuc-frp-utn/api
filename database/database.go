@@ -19,7 +19,6 @@ func init() {
 	name := os.Getenv("DB_NAME")
 
 	var port int
-	var err error
 	if value, err := strconv.Atoi(os.Getenv("DB_PORT")); err == nil {
 		port = value
 	} else {
@@ -34,6 +33,7 @@ func init() {
 		Database: name,
 	}
 
+	var err error
 	if Db, err = New(config); err != nil {
 		panic("error setting database up")
 	}

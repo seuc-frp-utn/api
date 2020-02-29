@@ -14,3 +14,13 @@ func GeneratePassword(plain string) (*string, error) {
 
 	return &hashed, nil
 }
+
+func ComparePasswords(plain, hashed string) bool {
+	bPlain := []byte(plain)
+	bHashed := []byte(hashed)
+	err := bcrypt.CompareHashAndPassword(bHashed, bPlain)
+	if err != nil {
+		return false
+	}
+	return true
+}
