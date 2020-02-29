@@ -1,0 +1,89 @@
+package users
+
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/seuc-frp-utn/api/application"
+	"github.com/stretchr/testify/assert"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+	"time"
+)
+
+
+func TestController_GetService(t *testing.T) {
+
+}
+
+func TestController_SetService(t *testing.T) {
+
+}
+
+func TestController_Create(t *testing.T) {
+	r := gin.Default()
+
+	var mock application.IService
+
+	mock = MockService{
+		GetRepositoryMock: nil,
+		SetRepositoryMock: nil,
+		CreateMock: func(entity interface{}) (interface{}, error) {
+				user, ok := entity.(UserCreate)
+				if !ok {
+					return nil, errors.New("wrong format")
+				}
+				return User{
+					FirstName:  user.FirstName,
+					MiddleName: user.MiddleName,
+					LastName:   user.LastName,
+					Email:      user.Email,
+					Birthday:   time.Time{},
+					Password:   fmt.Sprintf("%s-test-hashed", user.Password),
+				}, nil
+		},
+		ReadMock:          nil,
+		ReadAllMock:       nil,
+		UpdateMock:        nil,
+		RemoveMock:        nil,
+	}
+
+	(*UserController).SetService(&mock)
+
+	r.POST("/", (*UserController).Create)
+	
+	userCreate := UserCreate{
+		FirstName:  "",
+		MiddleName: nil,
+		LastName:   "",
+		Email:      "",
+		Birthday:   time.Time{},
+		Password:   "",
+	}
+
+	mjson, err := json.Marshal(userCreate)
+	if err != nil {
+		t.Fail()
+	}
+	body := bytes.NewReader(mjson)
+
+	w := httptest.NewRecorder()
+	req, err := http.NewRequest("POST", "/", body)
+	if err != nil {
+		t.Fail()
+	}
+
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusCreated, w.Code)
+	var result User
+	json.Unmarshal(w.Body.Bytes(), &result)
+
+	assert.Equal(t, userCreate.FirstName, result.FirstName)
+	assert.Equal(t, userCreate.LastName, result.LastName)
+	assert.Equal(t, userCreate.Email, result.Email)
+	assert.Nil(t, result.Password)
+}
