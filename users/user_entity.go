@@ -13,7 +13,6 @@ type User struct {
 	Email string `json:"email" gorm:"unique"`
 	Birthday time.Time `json:"birthday"`
 	Password string `json:"-"`
-	Salt string `json:"-"`
 }
 
 type UserCreate struct {
