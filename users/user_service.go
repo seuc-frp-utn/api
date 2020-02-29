@@ -1,7 +1,10 @@
 package users
 
 import (
+	"errors"
 	"github.com/seuc-frp-utn/api/application"
+	"github.com/seuc-frp-utn/api/auth"
+	"time"
 )
 
 type Service struct {
@@ -17,18 +20,50 @@ func NewService(repository *application.IRepository) *application.IService {
 }
 
 func (s Service) GetRepository() (*application.IRepository, error) {
-	panic("implement me")
+	if s.repository == nil {
+		return nil, errors.New("undefined repository")
+	}
+	return s.repository, nil
 }
 
 func (s Service) SetRepository(repository *application.IRepository) error {
-	panic("implement me")
+	s.repository = repository
+	return nil
 }
 
 func (s Service) Create(entity interface{}) (interface{}, error) {
-	panic("implement me")
+	userCreate, ok := entity.(UserCreate)
+	if !ok {
+		return nil, errors.New("wrong format")
+	}
+
+	hash, err := auth.GeneratePassword(userCreate.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	user := User{
+		FirstName:  userCreate.FirstName,
+		MiddleName: userCreate.MiddleName,
+		LastName:   userCreate.LastName,
+		Email:      userCreate.Password,
+		Birthday:   time.Time{},
+		Password:   *hash,
+	}
+
+	result, err := (*s.repository).Create(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
 func (s Service) Read(uuid string) (interface{}, error) {
+	panic("implement me")
+}
+
+func (s Service) ReadAll() (interface{}, error) {
 	panic("implement me")
 }
 

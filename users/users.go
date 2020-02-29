@@ -8,11 +8,11 @@ import (
 var (
 	UserController *application.IController
 	UserService *application.IService
-	UserRepository *application.IRepository
+	userRepository *application.IRepository
 )
 
 func init() {
-	UserRepository = NewRepository(database.Db)
-	UserService = NewService(UserRepository)
+	userRepository = NewRepository(database.Db)
+	UserService = NewService(userRepository)
 	UserController = NewController(UserService)
 }
