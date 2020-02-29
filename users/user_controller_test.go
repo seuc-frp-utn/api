@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/seuc-frp-utn/api/application"
 	"github.com/stretchr/testify/assert"
@@ -26,6 +25,11 @@ func TestController_SetService(t *testing.T) {
 func TestController_Create(t *testing.T) {
 	r := gin.Default()
 
+	root := r.Group("/")
+	{
+		Register(root)
+	}
+
 	var mock application.IService
 
 	mock = MockService{
@@ -42,7 +46,7 @@ func TestController_Create(t *testing.T) {
 					LastName:   user.LastName,
 					Email:      user.Email,
 					Birthday:   time.Time{},
-					Password:   fmt.Sprintf("%s-test-hashed", user.Password),
+					Password:   nil,
 				}, nil
 		},
 		ReadMock:          nil,
@@ -52,8 +56,6 @@ func TestController_Create(t *testing.T) {
 	}
 
 	(*UserController).SetService(&mock)
-
-	r.POST("/", (*UserController).Create)
 	
 	userCreate := UserCreate{
 		FirstName:  "",

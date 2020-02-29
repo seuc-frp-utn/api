@@ -4,5 +4,5 @@ import "github.com/jinzhu/gorm"
 
 type Model struct {
 	gorm.Model
-	UUID string
+	UUID string `json:"uuid"`
 }

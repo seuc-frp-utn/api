@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"os"
 	"strconv"
 )
@@ -12,7 +13,16 @@ var (
 	Db *gorm.DB
 )
 
-func init() {
+// Config represents a set of parameter to configure a database.
+type Config struct {
+	Host string
+	Port int
+	User string
+	Password string
+	Database string
+}
+
+func SetupDatabase() {
 	host := os.Getenv("DB_HOST")
 	user := os.Getenv("DB_USER")
 	pass := os.Getenv("DB_PASSWORD")
@@ -34,22 +44,21 @@ func init() {
 	}
 
 	var err error
-	if Db, err = New(config); err != nil {
+	if Db, err = NewPostgresDb(config); err != nil {
 		panic("error setting database up")
 	}
 }
 
-// Config represents a set of parameter to configure a database.
-type Config struct {
-	Host string
-	Port int
-	User string
-	Password string
-	Database string
+func SetupDatabaseTests() {
+	var err error
+	path := os.Getenv("DB_TEST_PATH")
+	if Db, err = NewSqliteDb(path); err != nil {
+		panic("error setting test database up")
+	}
 }
 
 // New open a new database connection
-func New(config Config) (*gorm.DB, error) {
+func NewPostgresDb(config Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"host=%s port=%d user=%s dbname=%s password=%s",
 		config.Host,
@@ -60,6 +69,14 @@ func New(config Config) (*gorm.DB, error) {
 	)
 
 	db, err := gorm.Open("postgres", dsn)
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
+}
+
+func NewSqliteDb(path string) (*gorm.DB, error) {
+	db, err := gorm.Open("sqlite3", path)
 	if err != nil {
 		return nil, err
 	}

@@ -12,7 +12,7 @@ type User struct {
 	LastName string `json:"last_name"`
 	Email string `json:"email" gorm:"unique"`
 	Birthday time.Time `json:"birthday"`
-	Password string `json:"-"`
+	Password *string `json:"-,omitempty"`
 }
 
 type UserCreate struct {

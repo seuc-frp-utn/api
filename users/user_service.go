@@ -48,7 +48,7 @@ func (s Service) Create(entity interface{}) (interface{}, error) {
 		LastName:   userCreate.LastName,
 		Email:      userCreate.Password,
 		Birthday:   time.Time{},
-		Password:   *hash,
+		Password:   hash,
 	}
 
 	result, err := (*s.repository).Create(user)
