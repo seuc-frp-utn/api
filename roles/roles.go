@@ -4,11 +4,15 @@ type Role int
 
 const (
 	USER Role = 0x1
-	TEACHER Role = 0x1 << 100
-	AUTHORITY Role = 0x1 << 200
-	OPERATOR Role = 0x1 << 300
-	ADMIN Role = 0x1 << 400
+	TEACHER Role = 0x1 << 1
+	AUTHORITY Role = 0x1 << 2
+	OPERATOR Role = 0x1 << 3
+	ADMIN Role = 0x1 << 4
 )
+
+func (r Role) HasRole(role Role) bool {
+	return r & role != 0
+}
 
 func (r Role) IsUser() bool {
 	return r&USER != 0
