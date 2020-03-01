@@ -10,6 +10,7 @@ type MockService struct {
 	ReadAllMock func() (interface{}, error)
 	UpdateMock func(uuid string, entity interface{}) (interface{}, error)
 	RemoveMock func(uuid string) (interface{}, error)
+	FindMock func(field string, value interface{}) (interface{}, error)
 }
 
 func (s MockService) GetRepository() (*application.IRepository, error) {
@@ -38,4 +39,8 @@ func (s MockService) Remove(uuid string) (interface{}, error) {
 
 func (s MockService) Update(uuid string, entity interface{}) (interface{}, error) {
 	return s.UpdateMock(uuid, entity)
+}
+
+func (s MockService) Find(field string, value interface{}) (interface{}, error) {
+	return s.FindMock(field, value)
 }

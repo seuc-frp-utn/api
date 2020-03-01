@@ -12,6 +12,7 @@ type MockRepository struct {
 	ReadAllMock func() (interface{}, error)
 	UpdateMock func(uuid string, entity interface{}) (interface{}, error)
 	RemoveMock func(uuid string) (interface{}, error)
+	FindMock func(field string, value interface{}) (interface{}, error)
 }
 
 func (s MockRepository) GetDatabase() (*gorm.DB, error) {
@@ -40,4 +41,8 @@ func (s MockRepository) Remove(uuid string) (interface{}, error) {
 
 func (s MockRepository) Update(uuid string, entity interface{}) (interface{}, error) {
 	return s.UpdateMock(uuid, entity)
+}
+
+func (s MockRepository) Find(field string, value interface{}) (interface{}, error) {
+	return s.FindMock(field, value)
 }

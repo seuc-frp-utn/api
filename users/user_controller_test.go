@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/seuc-frp-utn/api/application"
+	"github.com/seuc-frp-utn/api/tests"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
@@ -32,7 +33,7 @@ func TestController_Create(t *testing.T) {
 
 	var mock application.IService
 
-	mock = MockService{
+	mock = tests.MockService{
 		GetRepositoryMock: nil,
 		SetRepositoryMock: nil,
 		CreateMock: func(entity interface{}) (interface{}, error) {

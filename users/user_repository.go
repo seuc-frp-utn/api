@@ -86,4 +86,5 @@ func (r Repository) Find(field string, value interface{}) (interface{}, error) {
 	if err := r.db.Model(&User{}).First(user).Where(query, value).Error; err != nil {
 		return nil, err
 	}
+	return &user, nil
 }
