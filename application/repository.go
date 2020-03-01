@@ -10,4 +10,5 @@ type IRepository interface {
 	ReadAll() (interface{}, error)
 	Update(uuid string, entity interface{}) (interface{}, error)
 	Remove(uuid string) (interface{}, error)
+	Find(field string, value interface{}) (interface{}, error)
 }
