@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/seuc-frp-utn/api/application"
+	"github.com/seuc-frp-utn/api/auth"
 	"net/http"
 )
 
@@ -48,7 +49,7 @@ func (c Controller) Create(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(
-			http.StatusBadRequest,
+			http.StatusInternalServerError,
 			gin.H{
 				"error": err.Error(),
 			},
@@ -61,11 +62,44 @@ func (c Controller) Create(ctx *gin.Context) {
 }
 
 func (c Controller) Read(ctx *gin.Context) {
-	panic("implement me")
+	uuid := ctx.Param("uuid")
+
+	if !auth.IsUUID(uuid) {
+		ctx.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": "Invalid UUID",
+			},
+		)
+		return
+	}
+
+	result, err := (*c.service).Read(uuid)
+	if err != nil {
+		ctx.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result)
 }
 
 func (c Controller) ReadAll(ctx *gin.Context) {
-	panic("implement me")
+	result, err := (*c.service).ReadAll()
+	if err != nil {
+		ctx.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
+		return
+	}
+	ctx.JSON(http.StatusOK, result)
 }
 
 func (c Controller) Update(ctx *gin.Context) {
