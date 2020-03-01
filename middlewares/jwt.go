@@ -1,12 +1,13 @@
-package auth
+package middlewares
 
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/seuc-frp-utn/api/auth"
 	"net/http"
 )
 
-func Handler(ctx *gin.Context) {
+func JWT(ctx *gin.Context) {
 	field := ctx.GetHeader("Authorization")
 	if len(field) < 0 {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
@@ -18,14 +19,14 @@ func Handler(ctx *gin.Context) {
 	var token string
 	fmt.Sscanf(field, "JWT %s", &token)
 
-	if !Sanitize(token) {
+	if !auth.Sanitize(token) {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Invalid JWT",
 		})
 		return
 	}
 
-	jwt, err := Decode(token)
+	jwt, err := auth.Decode(token)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Unauthorized",

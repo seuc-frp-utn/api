@@ -3,7 +3,8 @@ module github.com/seuc-frp-utn/api
 go 1.13
 
 require (
-	github.com/appleboy/gin-jwt/v2 v2.6.3 // indirect
+	github.com/appleboy/gin-jwt/v2 v2.6.3
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/golang/protobuf v1.3.4 // indirect

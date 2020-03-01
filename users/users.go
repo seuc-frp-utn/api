@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/seuc-frp-utn/api/application"
 	"github.com/seuc-frp-utn/api/database"
+	"github.com/seuc-frp-utn/api/middlewares"
+	"github.com/seuc-frp-utn/api/roles"
 )
 
 var (
@@ -20,10 +22,13 @@ func initialize() {
 
 func Register(group *gin.RouterGroup) *gin.RouterGroup {
 	initialize()
-	group.GET("/:uuid", (*UserController).Read)
-	group.GET("/", (*UserController).ReadAll)
-	group.POST("/", (*UserController).Create)
-	group.PUT("/:uuid", (*UserController).Update)
-	group.DELETE("/:uuid", (*UserController).Remove)
+	group.Use(middlewares.Handler)
+	{
+		group.GET("/:uuid", middlewares.Handler(roles.USER|roles.OPERATOR|roles.ADMIN), (*UserController).Read)
+		group.GET("/", middlewares.Handler(roles.OPERATOR|roles.ADMIN), (*UserController).ReadAll)
+		group.POST("/", middlewares.Handler(roles.OPERATOR|roles.ADMIN), (*UserController).Create)
+		group.PUT("/:uuid", middlewares.Handler(roles.OPERATOR|roles.ADMIN), (*UserController).Update)
+		group.DELETE("/:uuid", middlewares.Handler(roles.OPERATOR|roles.ADMIN), (*UserController).Remove)
+	}
 	return group
 }

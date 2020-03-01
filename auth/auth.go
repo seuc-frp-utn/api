@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/seuc-frp-utn/api/roles"
@@ -74,6 +75,7 @@ func Decode(token string) (*JWT, error) {
 			Roles: claims.Profile.Roles,
 		}, nil
 	}
+	return nil, errors.New("unable to decode JWT")
 }
 
 func Sanitize(token string) bool {

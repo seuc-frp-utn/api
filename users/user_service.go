@@ -74,3 +74,7 @@ func (s Service) Remove(uuid string) (interface{}, error) {
 func (s Service) Update(uuid string, entity interface{}) (interface{}, error) {
 	panic("implement me")
 }
+
+func (s Service) Find(field string, value interface{}) (interface{}, error) {
+	return (*s.repository).Find(field, value)
+}

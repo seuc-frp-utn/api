@@ -2,6 +2,7 @@ package users
 
 import (
 	"errors"
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/seuc-frp-utn/api/application"
 )
@@ -73,8 +74,16 @@ func (r Repository) Update(uuid string, entity interface{}) (interface{}, error)
 
 func (r Repository) Remove(uuid string) (interface{}, error) {
 	var user User
-	if err := r.db.Model(&User{}).First(&user).Where("uuid = ?").Error; err != nil {
+	if err := r.db.Model(&User{}).Where("uuid = ?").Delete(user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (r Repository) Find(field string, value interface{}) (interface{}, error) {
+	var user User
+	query := fmt.Sprintf("%s = ?", field)
+	if err := r.db.Model(&User{}).First(user).Where(query, value).Error; err != nil {
+		return nil, err
+	}
 }
