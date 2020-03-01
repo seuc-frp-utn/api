@@ -60,15 +60,27 @@ func (s Service) Create(entity interface{}) (interface{}, error) {
 }
 
 func (s Service) Read(uuid string) (interface{}, error) {
-	panic("implement me")
+	result, err := (*s.repository).Read(uuid)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 func (s Service) ReadAll() (interface{}, error) {
-	panic("implement me")
+	result, err := (*s.repository).ReadAll()
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 func (s Service) Remove(uuid string) (interface{}, error) {
-	panic("implement me")
+	result, err := (*s.repository).Remove(uuid)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 func (s Service) Update(uuid string, entity interface{}) (interface{}, error) {
@@ -76,5 +88,9 @@ func (s Service) Update(uuid string, entity interface{}) (interface{}, error) {
 }
 
 func (s Service) Find(field string, value interface{}) (interface{}, error) {
-	return (*s.repository).Find(field, value)
+	result, err := (*s.repository).Find(field, value)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }

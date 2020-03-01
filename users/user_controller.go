@@ -103,7 +103,43 @@ func (c Controller) ReadAll(ctx *gin.Context) {
 }
 
 func (c Controller) Update(ctx *gin.Context) {
-	panic("implement me")
+	uuid := ctx.Param("uuid")
+	if !auth.IsUUID(uuid) {
+		ctx.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": "Invalid UUID",
+			},
+		)
+		return
+	}
+
+	var body UserUpdate
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		ctx.JSON(
+			http.StatusBadRequest,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
+		return
+	}
+
+	result, err := (*c.service).Update(uuid, body)
+
+	if err != nil {
+		ctx.JSON(
+			http.StatusInternalServerError,
+			gin.H{
+				"error": err.Error(),
+			},
+		)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result)
+
+
 }
 
 func (c Controller) Remove(ctx *gin.Context) {
