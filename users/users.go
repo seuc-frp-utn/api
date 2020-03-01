@@ -32,3 +32,38 @@ func Register(group *gin.RouterGroup) *gin.RouterGroup {
 	}
 	return group
 }
+
+func RegisterTest(group *gin.RouterGroup) *gin.RouterGroup {
+	initialize()
+	group.GET("/:uuid", (*UserController).Read)
+	group.GET("/", (*UserController).ReadAll)
+	group.POST("/", (*UserController).Create)
+	group.PUT("/:uuid", (*UserController).Update)
+	group.DELETE("/:uuid", (*UserController).Remove)
+	return group
+
+}
+
+func RegisterTestJWT(group *gin.RouterGroup) *gin.RouterGroup {
+	initialize()
+	group.Use(middlewares.JWT)
+	{
+		group.GET("/:uuid", (*UserController).Read)
+		group.GET("/", (*UserController).ReadAll)
+		group.POST("/", (*UserController).Create)
+		group.PUT("/:uuid", (*UserController).Update)
+		group.DELETE("/:uuid", (*UserController).Remove)
+	}
+	return group
+}
+
+func RegisterTestRoles(group *gin.RouterGroup) *gin.RouterGroup {
+	initialize()
+	group.GET("/:uuid", middlewares.Roles(roles.USER|roles.OPERATOR|roles.ADMIN), (*UserController).Read)
+	group.GET("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).ReadAll)
+	group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Create)
+	group.PUT("/:uuid", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Update)
+	group.DELETE("/:uuid", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Remove)
+	return group
+
+}

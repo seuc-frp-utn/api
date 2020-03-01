@@ -28,7 +28,7 @@ func TestController_Create(t *testing.T) {
 
 	root := r.Group("/")
 	{
-		Register(root)
+		RegisterTest(root)
 	}
 
 	var mock application.IService
