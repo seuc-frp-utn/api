@@ -5,5 +5,5 @@ import "github.com/seuc-frp-utn/api/database"
 func main() {
 	router := initializeRouter()
 	database.SetupDatabase()
-	router.Run(":8080")
+	router.Run(":3000")
 }

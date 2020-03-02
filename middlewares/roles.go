@@ -12,7 +12,7 @@ func Roles(roles roles.Role) gin.HandlerFunc {
 		value, ok := c.Get("jwt")
 		if !ok {
 			c.JSON(http.StatusForbidden, gin.H{
-				"message": "Unassigned role",
+				"message": "Invalid JWT",
 			})
 			return
 		}
@@ -20,13 +20,13 @@ func Roles(roles roles.Role) gin.HandlerFunc {
 		jwt, ok := value.(auth.JWT)
 		if !ok {
 			c.JSON(http.StatusForbidden, gin.H{
-				"message": "Invalid role",
+				"message": "Invalid JWT",
 			})
 			return
 		}
 
 		uuid := c.Param("uuid")
-		if len(uuid) > 0 && jwt.Roles.IsUser() && jwt.UUID == uuid {
+		if jwt.Roles.IsUser() && jwt.UUID != uuid {
 			c.JSON(http.StatusForbidden, gin.H{
 				"message": "Not enough permissions",
 			})
