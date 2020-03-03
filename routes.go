@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/seuc-frp-utn/api/courses"
 	"github.com/seuc-frp-utn/api/users"
 )
 
@@ -23,9 +24,9 @@ func registerRoutes(group *gin.RouterGroup) *gin.RouterGroup {
 		}
 		//////////////////////////////////////////////////
 		//////////////////////////////////////////////////
-		courses := v1.Group("/courses")
+		coursesGroup := v1.Group("/courses")
 		{
-			courses.GET("/")
+			courses.Register(coursesGroup)
 		}
 		//////////////////////////////////////////////////
 		//////////////////////////////////////////////////

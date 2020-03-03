@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/seuc-frp-utn/api/application"
 	"github.com/seuc-frp-utn/api/auth"
-	"time"
 )
 
 type Service struct {
@@ -47,7 +46,7 @@ func (s Service) Create(entity interface{}) (interface{}, error) {
 		MiddleName: userCreate.MiddleName,
 		LastName:   userCreate.LastName,
 		Email:      userCreate.Password,
-		Birthday:   time.Time{},
+		Birthday:   userCreate.Birthday,
 		Password:   hash,
 	}
 
@@ -84,7 +83,56 @@ func (s Service) Remove(uuid string) (interface{}, error) {
 }
 
 func (s Service) Update(uuid string, entity interface{}) (interface{}, error) {
-	panic("implement me")
+	userUpdate, ok := entity.(UserUpdate)
+	if !ok {
+		return nil, errors.New("wrong format")
+	}
+
+	found, err := s.Read(uuid)
+	userFound, ok := found.(User)
+	if !ok {
+		return nil, errors.New("wrong format")
+	}
+
+	user := User{}
+
+	var hash *string
+	if userUpdate.Password != nil && !auth.ComparePasswords(*userUpdate.Password, *userFound.Password) {
+		if hash, err = auth.GeneratePassword(*userUpdate.Password); err != nil {
+			return nil, err
+		}
+		user.Password = hash
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	if userUpdate.FirstName != nil {
+		user.FirstName = *userUpdate.FirstName
+	}
+
+	if userUpdate.MiddleName != nil {
+		user.MiddleName = userUpdate.MiddleName
+	}
+
+	if userUpdate.LastName != nil {
+		user.LastName = *userUpdate.LastName
+	}
+
+	if userUpdate.Email != nil {
+		user.Email = *userUpdate.Email
+	}
+
+	if userUpdate.Birthday != nil {
+		user.Birthday = *userUpdate.Birthday
+	}
+
+	result, err := (*s.repository).Update(uuid, user)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 func (s Service) Find(field string, value interface{}) (interface{}, error) {

@@ -18,7 +18,10 @@ func initialize() {
 	userRepository = NewRepository(database.Db)
 	UserService = NewService(userRepository)
 	UserController = NewController(UserService)
-	database.DBMigrate(database.Db, User{})
+	err := database.Migrate(database.Db, User{})
+	if err != nil {
+		panic(err)
+	}
 }
 
 func Register(group *gin.RouterGroup) *gin.RouterGroup {
