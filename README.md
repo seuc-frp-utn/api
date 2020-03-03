@@ -11,7 +11,7 @@ Establecer una plataforma digital que permita la autenticación de los certifica
 El principal objetivo del proyecto es la creación de una aplicación web para la Universidad Tecnológica Nacional - Facultad Regional Paraná, cumpliendo con las especificaciones y requerimientos de la Secretaría de Extensión Universitaria y Cultura, con los máximos estándares de calidad posibles, aplicando tecnologías y estándares modernos para el desarrollo de dicha aplicación.
 
 ## Solución especifica
-Desarrollar un servicio web que provea de los elementos necesarios para el funcionamiento de la aplicación y la obtención de la información utilizada en las interfaces mencionadas con anterioridad.
+Desarrollar un servicio web tipo servidor HTTP que provea de los elementos necesarios para el funcionamiento de la aplicación y la obtención de la información utilizada en las UIs que consuman esta API.
 
 Diagramar una base de datos y las relaciones pertinentes entre dichos datos.
 
