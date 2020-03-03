@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/seuc-frp-utn/api/auth"
 	"github.com/seuc-frp-utn/api/users"
 )
 
@@ -44,8 +43,8 @@ func registerRoutes(group *gin.RouterGroup) *gin.RouterGroup {
 		//////////////////////////////////////////////////
 		authGroup := v1.Group("/auth")
 		{
-			authGroup.POST("/register", auth.Signup)
-			authGroup.POST("/login", auth.Login)
+			authGroup.POST("/register")
+			authGroup.POST("/login")
 		}
 	}
 	return v1
