@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/logo.png" width="200" alt="HUCK Electronics" />
+  <img src="./assets/logo.png" width="200" alt="UTN-FRP SEUC" />
   <h1>Secretaría de Extensión Universitaria y Cultura - UTN.FRP</h1>
   <p>Análisis, diseño, desarrollo, pruebas e implementación de plataforma digital para autenticación de certificados en línea y registro de pagos (UTN-FRP-EXT)</p>
 </div>
