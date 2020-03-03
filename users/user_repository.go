@@ -36,7 +36,7 @@ func (r Repository) Create(entity interface{}) (interface{}, error) {
 	if !ok {
 		return nil, errors.New("wrong format")
 	}
-	if pk := r.db.NewRecord(user); pk {
+	if pk := r.db.NewRecord(user); !pk {
 		return nil, errors.New("user already exists")
 	}
 	if err := r.db.Create(&user).Error; err != nil {
@@ -55,7 +55,7 @@ func (r Repository) Read(uuid string) (interface{}, error) {
 
 func (r Repository) ReadAll() (interface{}, error) {
 	var users []User
-	if err := r.db.Model(&[]User{}).Find(users).Error; err != nil {
+	if err := r.db.Model(&User{}).Find(users).Error; err != nil {
 		return nil, err
 	}
 	return &users, nil

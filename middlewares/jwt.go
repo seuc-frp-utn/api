@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/seuc-frp-utn/api/auth"
@@ -9,10 +10,8 @@ import (
 
 func JWT(ctx *gin.Context) {
 	field := ctx.GetHeader("Authorization")
-	if len(field) < 0 {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Unauthorized",
-		})
+	if len(field) < 6 {
+		ctx.AbortWithError(http.StatusUnauthorized, errors.New("unauthorized - field length"))
 		return
 	}
 
@@ -20,20 +19,14 @@ func JWT(ctx *gin.Context) {
 	fmt.Sscanf(field, "JWT %s", &token)
 
 	if !auth.Sanitize(token) {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Invalid JWT",
-		})
+		ctx.AbortWithError(http.StatusUnauthorized, errors.New("invalid jwt - sanitize failed"))
 		return
 	}
 
 	jwt, err := auth.Decode(token)
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Unauthorized",
-		})
+		ctx.AbortWithError(http.StatusUnauthorized, errors.New("unauthorized - error decoding"))
 		return
 	}
-
 	ctx.Set("jwt", jwt)
-	ctx.Next()
 }

@@ -18,6 +18,7 @@ func initialize() {
 	userRepository = NewRepository(database.Db)
 	UserService = NewService(userRepository)
 	UserController = NewController(UserService)
+	database.DBMigrate(database.Db, User{})
 }
 
 func Register(group *gin.RouterGroup) *gin.RouterGroup {
@@ -33,7 +34,7 @@ func Register(group *gin.RouterGroup) *gin.RouterGroup {
 	return group
 }
 
-func RegisterTest(group *gin.RouterGroup) *gin.RouterGroup {
+func RegisterDirectTest(group *gin.RouterGroup) *gin.RouterGroup {
 	initialize()
 	group.GET("/:uuid", (*UserController).Read)
 	group.GET("/", (*UserController).ReadAll)

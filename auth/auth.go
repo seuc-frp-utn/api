@@ -34,7 +34,6 @@ type Claims struct {
 
 func init() {
 	secretKey = []byte(os.Getenv("JWT_SECRET_KEY"))
-	audience = os.Getenv("JWT_AUDIENCE")
 }
 
 func Encode(body JWT) (*string, error) {

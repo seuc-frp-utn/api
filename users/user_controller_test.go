@@ -28,7 +28,7 @@ func TestController_Create(t *testing.T) {
 
 	root := r.Group("/")
 	{
-		RegisterTest(root)
+		RegisterDirectTest(root)
 	}
 
 	var mock application.IService
@@ -59,12 +59,12 @@ func TestController_Create(t *testing.T) {
 	(*UserController).SetService(&mock)
 	
 	userCreate := UserCreate{
-		FirstName:  "",
+		FirstName:  "Test",
 		MiddleName: nil,
-		LastName:   "",
-		Email:      "",
+		LastName:   "Test",
+		Email:      "test@test.org",
 		Birthday:   time.Time{},
-		Password:   "",
+		Password:   "1234",
 	}
 
 	mjson, err := json.Marshal(userCreate)
@@ -88,5 +88,6 @@ func TestController_Create(t *testing.T) {
 	assert.Equal(t, userCreate.FirstName, result.FirstName)
 	assert.Equal(t, userCreate.LastName, result.LastName)
 	assert.Equal(t, userCreate.Email, result.Email)
+	assert.Equal(t, userCreate.Birthday, result.Birthday)
 	assert.Nil(t, result.Password)
 }
