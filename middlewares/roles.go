@@ -16,16 +16,18 @@ func Roles(roles roles.Role) gin.HandlerFunc {
 			return
 		}
 
-		jwt, ok := value.(auth.JWT)
+		jwt, ok := value.(*auth.JWT)
 		if !ok {
 			c.AbortWithError(http.StatusForbidden, errors.New("invalid jwt - roles casting"))
 			return
 		}
 
 		uuid := c.Param("uuid")
-		if jwt.Roles.IsUser() && !jwt.Roles.IsAdmin() && !jwt.Roles.IsOperator() && jwt.UUID != uuid {
-			c.AbortWithError(http.StatusForbidden, errors.New("not enough permissions - uuid mismatch"))
-			return
+		if len(uuid) > 0 {
+			if jwt.Roles.IsUser() && !jwt.Roles.IsAdmin() && !jwt.Roles.IsOperator() && jwt.UUID != uuid {
+				c.AbortWithError(http.StatusForbidden, errors.New("not enough permissions - uuid mismatch"))
+				return
+			}
 		}
 
 		if !jwt.Roles.HasRole(roles) {

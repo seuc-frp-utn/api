@@ -2,10 +2,11 @@ package auth
 
 import (
 	"errors"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/seuc-frp-utn/api/roles"
 	"os"
+	"strings"
+	"time"
 )
 
 var (
@@ -36,7 +37,8 @@ func init() {
 	secretKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 }
 
-func Encode(body JWT) (*string, error) {
+func Encode(body JWT) (*string, *int64, error) {
+	expiresAt := time.Now().Add(time.Hour * 8).Unix()
 	claims := Claims{
 		Profile{
 			Email: body.Email,
@@ -44,7 +46,7 @@ func Encode(body JWT) (*string, error) {
 			Roles: body.Roles,
 		},
 		jwt.StandardClaims{
-			ExpiresAt: 15000,
+			ExpiresAt: expiresAt,
 			Issuer:    "seuc.frp.utn.edu.ar",
 			Subject:   body.UUID,
 		},
@@ -52,9 +54,9 @@ func Encode(body JWT) (*string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	result, err := token.SignedString(secretKey)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return &result, nil
+	return &result, &expiresAt, nil
 }
 
 func Decode(token string) (*JWT, error) {
@@ -77,12 +79,17 @@ func Decode(token string) (*JWT, error) {
 	return nil, errors.New("unable to decode JWT")
 }
 
+func SplitJWT(token string) (header, payload, signature string) {
+	slice := strings.Split(token, ".")
+	return slice[0], slice[1], slice[2]
+}
+
 func Sanitize(token string) bool {
 	var header string
 	var payload string
 	var signature string
-	fmt.Sscanf(token, "%s.%s.%s", &header, &payload, &signature)
-	if len(header) > 0 && len(payload) > 0 && len(signature) > 0 {
+	header, payload, signature = SplitJWT(token)
+	if len(header) > 20 && len(payload) > 20 && len(signature) > 20 {
 		return true
 	}
 	return false

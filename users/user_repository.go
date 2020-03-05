@@ -83,7 +83,7 @@ func (r Repository) Remove(uuid string) (interface{}, error) {
 func (r Repository) Find(field string, value interface{}) (interface{}, error) {
 	var user User
 	query := fmt.Sprintf("%s = ?", field)
-	if err := r.db.Model(&User{}).First(user).Where(query, value).Error; err != nil {
+	if err := r.db.Model(&User{}).Where(query, value).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil

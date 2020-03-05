@@ -1,6 +1,7 @@
 package users
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/seuc-frp-utn/api/roles"
 	"time"
@@ -14,8 +15,15 @@ type User struct {
 	LastName string `json:"last_name"`
 	Email string `json:"email" gorm:"unique_index"`
 	Birthday time.Time `json:"birthday"`
-	Password *string `json:"-,omitempty"`
+	Password *string `json:"-"`
 	Role roles.Role `json:"role"`
+}
+
+func (u User) Fullname() string {
+	if u.MiddleName != nil {
+		return fmt.Sprintf("%s %s %s", u.FirstName, *u.MiddleName, u.LastName)
+	}
+	return fmt.Sprintf("%s %s", u.FirstName, u.LastName)
 }
 
 type UserCreate struct {
