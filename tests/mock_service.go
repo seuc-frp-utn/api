@@ -25,11 +25,11 @@ func (s MockService) Create(entity interface{}) (interface{}, error) {
 	return s.CreateMock(entity)
 }
 
-func (s MockService) Read(uuid string) (interface{}, error) {
+func (s MockService) Get(uuid string) (interface{}, error) {
 	return s.ReadMock(uuid)
 }
 
-func (s MockService) ReadAll() (interface{}, error) {
+func (s MockService) GetAll() (interface{}, error) {
 	return s.ReadAllMock()
 }
 

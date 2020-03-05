@@ -3,6 +3,7 @@ package courses
 import (
 	"errors"
 	"github.com/seuc-frp-utn/api/application"
+	"github.com/seuc-frp-utn/api/auth"
 	"github.com/seuc-frp-utn/api/users"
 )
 
@@ -36,12 +37,20 @@ func (s Service) Create(entity interface{}) (interface{}, error) {
 		return nil, errors.New("wrong format")
 	}
 
-	_, err := (*users.UserService).Read(courseCreate.Teacher)
+	found, err := (*users.UserService).Get(courseCreate.Teacher)
 	if err != nil {
 		return nil, errors.New("teacher does not exist")
 	}
+	teacher, ok := found.(users.User)
+	if !ok {
+		return nil, errors.New("invalid teacher")
+	}
+	if teacher.Role.IsTeacher() == false {
+		return nil, errors.New("selected user is not a teacher")
+	}
 
 	course := Course{
+		UUID: auth.GenerateUUID(),
 		Name:        courseCreate.Name,
 		Description: courseCreate.Description,
 		Image:       courseCreate.Image,
@@ -62,7 +71,7 @@ func (s Service) Create(entity interface{}) (interface{}, error) {
 	return result, nil
 }
 
-func (s Service) Read(uuid string) (interface{}, error) {
+func (s Service) Get(uuid string) (interface{}, error) {
 	result, err := (*s.repository).Read(uuid)
 	if err != nil {
 		return nil, err
@@ -70,7 +79,7 @@ func (s Service) Read(uuid string) (interface{}, error) {
 	return result, nil
 }
 
-func (s Service) ReadAll() (interface{}, error) {
+func (s Service) GetAll() (interface{}, error) {
 	result, err := (*s.repository).ReadAll()
 	if err != nil {
 		return nil, err
@@ -92,7 +101,7 @@ func (s Service) Update(uuid string, entity interface{}) (interface{}, error) {
 		return nil, errors.New("wrong format")
 	}
 
-	_, err := s.Read(uuid)
+	_, err := s.Get(uuid)
 	if err != nil {
 		return nil, errors.New("course does not exist")
 	}
@@ -127,7 +136,7 @@ func (s Service) Update(uuid string, entity interface{}) (interface{}, error) {
 		course.Months = *courseUpdate.Months
 	}
 	if courseUpdate.Teacher != nil {
-		if _, err := (*users.UserService).Read(*courseUpdate.Teacher); err == nil {
+		if _, err := (*users.UserService).Get(*courseUpdate.Teacher); err == nil {
 			course.Teacher = *courseUpdate.Teacher
 		}
 	}

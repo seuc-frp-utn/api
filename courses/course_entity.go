@@ -1,11 +1,10 @@
 package courses
 
-import (
-	"github.com/seuc-frp-utn/api/database"
-)
+import "github.com/jinzhu/gorm"
 
 type Course struct {
-	database.Model
+	gorm.Model
+	UUID string `json:"uuid"`
 	Name string `json:"name"`
 	Description string `json:"description"`
 	Image string `json:"image"`

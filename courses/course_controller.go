@@ -53,7 +53,7 @@ func (c Controller) Create(ctx *gin.Context) {
 func (c Controller) Read(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 
-	result, err := (*c.service).Read(uuid)
+	result, err := (*c.service).Get(uuid)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
@@ -63,7 +63,7 @@ func (c Controller) Read(ctx *gin.Context) {
 }
 
 func (c Controller) ReadAll(ctx *gin.Context) {
-	result, err := (*c.service).ReadAll()
+	result, err := (*c.service).GetAll()
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
@@ -95,7 +95,7 @@ func (c Controller) Update(ctx *gin.Context) {
 func (c Controller) Remove(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 
-	result, err := (*c.service).Read(uuid)
+	result, err := (*c.service).Get(uuid)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return

@@ -47,6 +47,7 @@ func SetupDatabase() {
 	if Db, err = NewPostgresDb(config); err != nil {
 		panic("error setting database up")
 	}
+	Db.LogMode(false)
 }
 
 func SetupDatabaseTests() {
@@ -55,6 +56,7 @@ func SetupDatabaseTests() {
 	if Db, err = NewSqliteDb(path); err != nil {
 		panic("error setting test database up")
 	}
+	Db.LogMode(true)
 }
 
 // New open a new database connection

@@ -42,6 +42,7 @@ func (s Service) Create(entity interface{}) (interface{}, error) {
 	}
 
 	user := User{
+		UUID: auth.GenerateUUID(),
 		FirstName:  userCreate.FirstName,
 		MiddleName: userCreate.MiddleName,
 		LastName:   userCreate.LastName,
@@ -58,7 +59,7 @@ func (s Service) Create(entity interface{}) (interface{}, error) {
 	return result, nil
 }
 
-func (s Service) Read(uuid string) (interface{}, error) {
+func (s Service) Get(uuid string) (interface{}, error) {
 	result, err := (*s.repository).Read(uuid)
 	if err != nil {
 		return nil, err
@@ -66,7 +67,7 @@ func (s Service) Read(uuid string) (interface{}, error) {
 	return result, nil
 }
 
-func (s Service) ReadAll() (interface{}, error) {
+func (s Service) GetAll() (interface{}, error) {
 	result, err := (*s.repository).ReadAll()
 	if err != nil {
 		return nil, err
@@ -88,7 +89,7 @@ func (s Service) Update(uuid string, entity interface{}) (interface{}, error) {
 		return nil, errors.New("wrong format")
 	}
 
-	found, err := s.Read(uuid)
+	found, err := s.Get(uuid)
 	userFound, ok := found.(User)
 	if !ok {
 		return nil, errors.New("wrong format")

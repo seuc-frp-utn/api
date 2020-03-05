@@ -1,17 +1,18 @@
 package users
 
 import (
-	"github.com/seuc-frp-utn/api/database"
+	"github.com/jinzhu/gorm"
 	"github.com/seuc-frp-utn/api/roles"
 	"time"
 )
 
 type User struct {
-	database.Model
+	gorm.Model
+	UUID string `json:"uuid" gorm:"unique_index"`
 	FirstName string `json:"first_name"`
 	MiddleName *string `json:"middle_name,omitempty"`
 	LastName string `json:"last_name"`
-	Email string `json:"email" gorm:"unique"`
+	Email string `json:"email" gorm:"unique_index"`
 	Birthday time.Time `json:"birthday"`
 	Password *string `json:"-,omitempty"`
 	Role roles.Role `json:"role"`
