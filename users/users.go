@@ -19,7 +19,7 @@ var (
 func initialize(test bool) {
 	userRepository = NewRepository(database.Db)
 	UserService = NewService(userRepository)
-	UserController = NewController(UserService)
+	UserController = application.NewController(UserService)
 	err := database.Migrate(database.Db, User{})
 	if err != nil {
 		panic(err)
@@ -78,10 +78,10 @@ func Register(group *gin.RouterGroup) *gin.RouterGroup {
 	initialize(true)
 	group.Use(middlewares.JWT)
 	{
-		group.GET("/:uuid", middlewares.UUID, middlewares.Roles(roles.USER|roles.OPERATOR|roles.ADMIN), (*UserController).Read)
-		group.GET("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).ReadAll)
-		group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Create)
-		group.PUT("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Update)
+		group.GET("/:uuid", middlewares.UUID, middlewares.Roles(roles.USER|roles.OPERATOR|roles.ADMIN), (*UserController).Get)
+		group.GET("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).GetAll)
+		group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Create(UserCreate{}))
+		group.PUT("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Update(UserUpdate{}))
 		group.DELETE("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Remove)
 	}
 	return group
@@ -89,10 +89,10 @@ func Register(group *gin.RouterGroup) *gin.RouterGroup {
 
 func RegisterDirectTest(group *gin.RouterGroup) *gin.RouterGroup {
 	initialize(true)
-	group.GET("/:uuid", (*UserController).Read)
-	group.GET("/", (*UserController).ReadAll)
-	group.POST("/", (*UserController).Create)
-	group.PUT("/:uuid", (*UserController).Update)
+	group.GET("/:uuid", (*UserController).Get)
+	group.GET("/", (*UserController).GetAll)
+	group.POST("/", (*UserController).Create(UserCreate{}))
+	group.PUT("/:uuid", (*UserController).Update(UserUpdate{}))
 	group.DELETE("/:uuid", (*UserController).Remove)
 	return group
 
@@ -102,10 +102,10 @@ func RegisterTestJWT(group *gin.RouterGroup) *gin.RouterGroup {
 	initialize(true)
 	group.Use(middlewares.JWT)
 	{
-		group.GET("/:uuid", (*UserController).Read)
-		group.GET("/", (*UserController).ReadAll)
-		group.POST("/", (*UserController).Create)
-		group.PUT("/:uuid", (*UserController).Update)
+		group.GET("/:uuid", (*UserController).Get)
+		group.GET("/", (*UserController).GetAll)
+		group.POST("/", (*UserController).Create(UserCreate{}))
+		group.PUT("/:uuid", (*UserController).Update(UserUpdate{}))
 		group.DELETE("/:uuid", (*UserController).Remove)
 	}
 	return group
@@ -113,10 +113,10 @@ func RegisterTestJWT(group *gin.RouterGroup) *gin.RouterGroup {
 
 func RegisterTestRoles(group *gin.RouterGroup) *gin.RouterGroup {
 	initialize(true)
-	group.GET("/:uuid", middlewares.Roles(roles.USER|roles.OPERATOR|roles.ADMIN), (*UserController).Read)
-	group.GET("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).ReadAll)
-	group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Create)
-	group.PUT("/:uuid", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Update)
+	group.GET("/:uuid", middlewares.Roles(roles.USER|roles.OPERATOR|roles.ADMIN), (*UserController).Get)
+	group.GET("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).GetAll)
+	group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Create(UserCreate{}))
+	group.PUT("/:uuid", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Update(UserUpdate{}))
 	group.DELETE("/:uuid", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Remove)
 	return group
 

@@ -17,7 +17,7 @@ var (
 func initialize() {
 	courseRepository = NewRepository(database.Db)
 	CourseService = NewService(courseRepository)
-	CourseController = NewController(CourseService)
+	CourseController = application.NewController(CourseService)
 	err := database.Migrate(database.Db, Course{})
 	if err != nil {
 		panic(err)
@@ -26,12 +26,12 @@ func initialize() {
 
 func Register(group *gin.RouterGroup) *gin.RouterGroup {
 	initialize()
-	group.GET("/:uuid", middlewares.UUID, (*CourseController).Read)
-	group.GET("/", (*CourseController).ReadAll)
+	group.GET("/:uuid", middlewares.UUID, (*CourseController).Get)
+	group.GET("/", (*CourseController).GetAll)
 	group.Use(middlewares.JWT)
 	{
-		group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*CourseController).Create)
-		group.PUT("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*CourseController).Update)
+		group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*CourseController).Create(CourseCreate{}))
+		group.PUT("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*CourseController).Update(CourseUpdate{}))
 		group.DELETE("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*CourseController).Remove)
 	}
 	return group
