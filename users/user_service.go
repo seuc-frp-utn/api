@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/seuc-frp-utn/api/application"
 	"github.com/seuc-frp-utn/api/auth"
+	"reflect"
 )
 
 type Service struct {
@@ -30,8 +31,8 @@ func (s Service) SetRepository(repository *application.IRepository) error {
 	return nil
 }
 
-func (s Service) Create(entity interface{}) (interface{}, error) {
-	userCreate, ok := entity.(UserCreate)
+func (s Service) Create(entity reflect.Value) (interface{}, error) {
+	userCreate, ok := reflect.ValueOf(entity).Interface().(UserCreate)
 	if !ok {
 		return nil, errors.New("wrong format")
 	}
@@ -83,8 +84,8 @@ func (s Service) Remove(uuid string) (interface{}, error) {
 	return result, nil
 }
 
-func (s Service) Update(uuid string, entity interface{}) (interface{}, error) {
-	userUpdate, ok := entity.(UserUpdate)
+func (s Service) Update(uuid string, entity reflect.Value) (interface{}, error) {
+	userUpdate, ok := reflect.ValueOf(entity).Interface().(UserUpdate)
 	if !ok {
 		return nil, errors.New("wrong format")
 	}

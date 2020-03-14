@@ -5,6 +5,7 @@ import (
 	"github.com/seuc-frp-utn/api/application"
 	"github.com/seuc-frp-utn/api/auth"
 	"github.com/seuc-frp-utn/api/users"
+	"reflect"
 )
 
 type Service struct {
@@ -31,8 +32,8 @@ func (s Service) SetRepository(repository *application.IRepository) error {
 	return nil
 }
 
-func (s Service) Create(entity interface{}) (interface{}, error) {
-	courseCreate, ok := entity.(CourseCreate)
+func (s Service) Create(entity reflect.Value) (interface{}, error) {
+	courseCreate, ok := entity.Interface().(CourseCreate)
 	if !ok {
 		return nil, errors.New("wrong format")
 	}
@@ -41,7 +42,7 @@ func (s Service) Create(entity interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, errors.New("teacher does not exist")
 	}
-	teacher, ok := found.(users.User)
+	teacher, ok := found.(*users.User)
 	if !ok {
 		return nil, errors.New("invalid teacher")
 	}
@@ -58,7 +59,7 @@ func (s Service) Create(entity interface{}) (interface{}, error) {
 		Finished:    courseCreate.Finished,
 		Hours:       courseCreate.Hours,
 		Price:       courseCreate.Price,
-		Months:      courseCreate.Months,
+		Classes:      courseCreate.Classes,
 		Link:        courseCreate.Link,
 		Teacher:	courseCreate.Teacher,
 	}
@@ -95,8 +96,8 @@ func (s Service) Remove(uuid string) (interface{}, error) {
 	return result, nil
 }
 
-func (s Service) Update(uuid string, entity interface{}) (interface{}, error) {
-	courseUpdate, ok := entity.(CourseUpdate)
+func (s Service) Update(uuid string, entity reflect.Value) (interface{}, error) {
+	courseUpdate, ok := reflect.ValueOf(entity).Interface().(CourseUpdate)
 	if !ok {
 		return nil, errors.New("wrong format")
 	}
@@ -132,8 +133,8 @@ func (s Service) Update(uuid string, entity interface{}) (interface{}, error) {
 	if courseUpdate.Price != nil {
 		course.Price = *courseUpdate.Price
 	}
-	if courseUpdate.Months != nil {
-		course.Months = *courseUpdate.Months
+	if courseUpdate.Classes != nil {
+		course.Classes = *courseUpdate.Classes
 	}
 	if courseUpdate.Teacher != nil {
 		if _, err := (*users.UserService).Get(*courseUpdate.Teacher); err == nil {

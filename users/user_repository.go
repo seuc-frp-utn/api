@@ -55,7 +55,7 @@ func (r Repository) Read(uuid string) (interface{}, error) {
 
 func (r Repository) ReadAll() (interface{}, error) {
 	var users []User
-	if err := r.db.Model(&User{}).Find(users).Error; err != nil {
+	if err := r.db.Model(&User{}).Find(&users).Error; err != nil {
 		return nil, err
 	}
 	return &users, nil

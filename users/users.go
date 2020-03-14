@@ -45,7 +45,7 @@ func addTestData() {
 		Email:      "root@admin.com",
 		Birthday:   time.Time{},
 		Password:   password,
-		Role:       roles.ADMIN|roles.USER,
+		Role:       roles.ADMIN|roles.USER|roles.TEACHER,
 	}
 
 	userUUID := auth.GenerateUUID()
@@ -60,8 +60,6 @@ func addTestData() {
 		Password:   userPassword,
 		Role:       roles.USER,
 	}
-
-
 
 	if userRepository != nil {
 		db, err := (*userRepository).GetDatabase()

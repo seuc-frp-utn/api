@@ -10,9 +10,9 @@ type Course struct {
 	Image string `json:"image"`
 	Started bool `json:"started"`
 	Finished bool `json:"finished"`
-	Hours uint `json:"hours"`
-	Price uint `json:"price"`
-	Months uint `json:"months"`
+	Hours uint64 `json:"hours"`
+	Price uint64 `json:"price"`
+	Classes uint64 `json:"classes"`
 	Link string `json:"link"`
 	Teacher string `json:"teacher"`
 }
@@ -23,9 +23,9 @@ type CourseCreate struct {
 	Image string `json:"image"`
 	Started bool `json:"started"`
 	Finished bool `json:"finished"`
-	Hours uint `json:"hours"`
-	Price uint `json:"price"`
-	Months uint `json:"months"`
+	Hours uint64 `json:"hours"`
+	Price uint64 `json:"price"`
+	Classes uint64 `json:"classes"`
 	Link string `json:"link"`
 	Teacher string `json:"teacher"`
 }
@@ -36,9 +36,9 @@ type CourseUpdate struct {
 	Image *string `json:"image,omitempty"`
 	Started *bool `json:"started,omitempty"`
 	Finished *bool `json:"finished,omitempty"`
-	Hours *uint `json:"hours,omitempty"`
-	Price *uint `json:"price,omitempty"`
-	Months *uint `json:"months,omitempty"`
+	Hours *uint64 `json:"hours,omitempty"`
+	Price *uint64 `json:"price,omitempty"`
+	Classes *uint64 `json:"classes,omitempty"`
 	Link *string `json:"link,omitempty"`
 	Teacher *string `json:"teacher,omitempty"`
 }

@@ -87,18 +87,21 @@ func Decode(token string) (*JWT, error) {
 }
 
 // SplitJWT receives an string and returns the header, the payload and the signature of a JWT.
-func SplitJWT(token string) (header, payload, signature string) {
+func SplitJWT(token string) (header, payload, signature *string) {
 	slice := strings.Split(token, ".")
-	return slice[0], slice[1], slice[2]
+	if len(slice) != 3 {
+		return nil, nil, nil
+	}
+	return &slice[0], &slice[1], &slice[2]
 }
 
 // Sanitize makes sure that the given token is valid.
 func Sanitize(token string) bool {
-	var header string
-	var payload string
-	var signature string
-	header, payload, signature = SplitJWT(token)
-	if len(header) > 20 && len(payload) > 20 && len(signature) > 20 {
+	header, payload, signature := SplitJWT(token)
+	if header == nil || payload == nil || signature == nil {
+		return false
+	}
+	if len(*header) > 20 && len(*payload) > 20 && len(*signature) > 20 {
 		return true
 	}
 	return false

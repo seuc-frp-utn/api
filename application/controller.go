@@ -1,7 +1,9 @@
 package application
+
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/seuc-frp-utn/api/utils"
 	"net/http"
 	"reflect"
 )
@@ -43,16 +45,28 @@ func (c *Controller) SetService(service *IService) error {
 
 func (c *Controller) Create(typeOf interface{}) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		v := reflect.New(reflect.TypeOf(typeOf))
-		ctx.BindJSON(v.Interface())
 
-		if err := ctx.BindJSON(v.Interface()); err != nil {
+		t := reflect.TypeOf(typeOf)
+
+		if t.Kind() != reflect.Struct {
+			ctx.AbortWithError(http.StatusInternalServerError, errors.New("input body is not a struct"))
+			return
+		}
+
+		var body map[string]interface{}
+		if err := ctx.BindJSON(&body); err != nil {
 			ctx.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
 
-		result, err := (*c.service).Create(v.Elem())
+		entity := reflect.Indirect(reflect.New(t))
+		if !entity.CanAddr() {
+			ctx.AbortWithError(http.StatusInternalServerError, errors.New("not addressable"))
+		}
 
+		entity = utils.FillStruct(entity, body)
+
+		result, err := (*c.service).Create(entity)
 		if err != nil {
 			ctx.AbortWithError(http.StatusInternalServerError, err)
 			return
@@ -88,7 +102,6 @@ func (c *Controller) Update(typeOf interface{}) gin.HandlerFunc  {
 		uuid := ctx.Param("uuid")
 
 		v := reflect.New(reflect.TypeOf(typeOf))
-		ctx.BindJSON(v.Interface())
 
 		if err := ctx.ShouldBindJSON(v.Interface()); err != nil {
 			ctx.AbortWithError(http.StatusBadRequest, err)
