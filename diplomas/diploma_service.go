@@ -77,10 +77,15 @@ func (s Service) Create(entity reflect.Value) (interface{}, error) {
 		return nil, err
 	}
 
-	uuid := auth.GenerateUUID()
+
+	token, err := auth.GenerateNanoUUID()
+	if err != nil {
+		return nil, err
+	}
+
 	diploma := Diploma{
-		UUID:      uuid,
-		Token:     auth.EncodeUUID(uuid),
+		UUID:      auth.GenerateUUID(),
+		Token:     token,
 		Course:    diplomaCreate.Course,
 		Dean:      diplomaCreate.Dean,
 		Secretary: diplomaCreate.Secretary,

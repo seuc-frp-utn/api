@@ -3,6 +3,7 @@ package auth
 import (
 	"github.com/btcsuite/btcutil/base58"
 	guuid "github.com/google/uuid"
+	nanoid "github.com/matoous/go-nanoid"
 )
 
 // GenerateUUID generates an UUID string.
@@ -12,7 +13,7 @@ func GenerateUUID() string {
 }
 
 // GenerateShortUUID generates an UUID and encodes it using base58.
-func GenerateShortUUID() string {
+func GenerateBase58UUID() string {
 	uuid := guuid.New()
 	b := []byte(uuid.String())
 	return base58.Encode(b)
@@ -22,6 +23,15 @@ func GenerateShortUUID() string {
 func EncodeUUID(uuid string) string {
 	b := []byte(uuid)
 	return base58.Encode(b)
+}
+
+// GenerateNanoUUID generates a user-friendly UUID of length 8.
+func GenerateNanoUUID() (string, error) {
+	uuid, err := nanoid.Nanoid(8)
+	if err != nil {
+		return "", err
+	}
+	return uuid, nil
 }
 
 // IsUUID receives an UUID value and checks if it's a valid UUID.
