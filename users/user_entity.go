@@ -10,9 +10,9 @@ import (
 type User struct {
 	gorm.Model
 	UUID string `json:"uuid" gorm:"unique_index"`
-	FirstName string `json:"first_name"`
-	MiddleName *string `json:"middle_name,omitempty"`
-	LastName string `json:"last_name"`
+	FirstName string `json:"firstName"`
+	MiddleName *string `json:"middleName,omitempty"`
+	LastName string `json:"lastName"`
 	Email string `json:"email" gorm:"unique_index"`
 	Birthday time.Time `json:"birthday"`
 	Password *string `json:"-"`
@@ -27,18 +27,18 @@ func (u User) Fullname() string {
 }
 
 type UserCreate struct {
-	FirstName string `json:"first_name"`
-	MiddleName *string `json:"middle_name"`
-	LastName string `json:"last_name"`
+	FirstName string `json:"firstName"`
+	MiddleName *string `json:"middleName"`
+	LastName string `json:"lastName"`
 	Email string `json:"email"`
 	Birthday time.Time `json:"birthday"`
 	Password string `json:"password"`
 }
 
 type UserUpdate struct {
-	FirstName *string `json:"first_name"`
-	MiddleName *string `json:"middle_name"`
-	LastName *string `json:"last_name"`
+	FirstName *string `json:"firstName"`
+	MiddleName *string `json:"middleName"`
+	LastName *string `json:"lastName"`
 	Email *string `json:"email"`
 	Birthday *time.Time `json:"birthday"`
 	Password *string `json:"password"`

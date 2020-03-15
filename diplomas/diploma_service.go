@@ -4,6 +4,8 @@ import (
 	"errors"
 	"github.com/seuc-frp-utn/api/application"
 	"github.com/seuc-frp-utn/api/auth"
+	"github.com/seuc-frp-utn/api/courses"
+	"github.com/seuc-frp-utn/api/users"
 	"reflect"
 )
 
@@ -37,8 +39,52 @@ func (s Service) Create(entity reflect.Value) (interface{}, error) {
 		return nil, errors.New("wrong format")
 	}
 
+	if !auth.IsUUID(diplomaCreate.Course) {
+		return nil, errors.New("invalid course")
+	}
+
+	if !auth.IsUUID(diplomaCreate.Dean) {
+		return nil, errors.New("invalid dean")
+	}
+
+	if !auth.IsUUID(diplomaCreate.Teacher) {
+		return nil, errors.New("invalid teacher")
+	}
+
+	if !auth.IsUUID(diplomaCreate.Secretary) {
+		return nil, errors.New("invalid secretary")
+	}
+
+	var err error
+
+	_, err = (*courses.CourseService).Get(diplomaCreate.Course)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = (*users.UserService).Get(diplomaCreate.Teacher)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = (*users.UserService).Get(diplomaCreate.Secretary)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = (*users.UserService).Get(diplomaCreate.Dean)
+	if err != nil {
+		return nil, err
+	}
+
+	uuid := auth.GenerateUUID()
 	diploma := Diploma{
-		UUID: auth.GenerateUUID(),
+		UUID:      uuid,
+		Token:     auth.EncodeUUID(uuid),
+		Course:    diplomaCreate.Course,
+		Dean:      diplomaCreate.Dean,
+		Secretary: diplomaCreate.Secretary,
+		Teacher:   diplomaCreate.Teacher,
 	}
 
 	result, err := (*s.repository).Create(diploma)
@@ -74,17 +120,49 @@ func (s Service) Remove(uuid string) (interface{}, error) {
 }
 
 func (s Service) Update(uuid string, entity reflect.Value) (interface{}, error) {
-	diplomaUpdate, ok := reflect.ValueOf(entity).Interface().(DiplomaUpdate)
+	diplomaUpdate, ok := entity.Interface().(DiplomaUpdate)
 	if !ok {
 		return nil, errors.New("wrong format")
 	}
 
-	_, err := s.Get(uuid)
+	found, err := s.Get(uuid)
 	if err != nil {
 		return nil, errors.New("diploma does not exist")
 	}
+	diploma, ok := found.(Diploma)
 
-	diploma := Diploma{}
+	if diplomaUpdate.Course != nil {
+		_, err = (*courses.CourseService).Get(*diplomaUpdate.Course)
+		if err != nil {
+			return nil, err
+		}
+		diploma.Course = *diplomaUpdate.Course
+	}
+
+	if diplomaUpdate.Teacher != nil {
+		_, err = (*users.UserService).Get(*diplomaUpdate.Teacher)
+		if err != nil {
+			return nil, err
+		}
+		diploma.Teacher = *diplomaUpdate.Teacher
+	}
+
+	if diplomaUpdate.Secretary != nil {
+		_, err = (*users.UserService).Get(*diplomaUpdate.Secretary)
+		if err != nil {
+			return nil, err
+		}
+		diploma.Secretary = *diplomaUpdate.Secretary
+	}
+
+	if diplomaUpdate.Dean != nil {
+		_, err = (*users.UserService).Get(*diplomaUpdate.Dean)
+		if err != nil {
+			return nil, err
+		}
+		diploma.Dean = *diplomaUpdate.Dean
+	}
+
 
 	result, err := (*s.repository).Update(uuid, diploma)
 	if err != nil {
