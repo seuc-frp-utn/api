@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -34,10 +35,8 @@ func TestController_Create(t *testing.T) {
 	var mock application.IService
 
 	mock = tests.MockService{
-		GetRepositoryMock: nil,
-		SetRepositoryMock: nil,
-		CreateMock: func(entity interface{}) (interface{}, error) {
-				user, ok := entity.(UserCreate)
+		CreateMock: func(entity reflect.Value) (interface{}, error) {
+				user, ok := entity.Interface().(UserCreate)
 				if !ok {
 					return nil, errors.New("wrong format")
 				}
@@ -50,10 +49,6 @@ func TestController_Create(t *testing.T) {
 					Password:   nil,
 				}, nil
 		},
-		ReadMock:          nil,
-		ReadAllMock:       nil,
-		UpdateMock:        nil,
-		RemoveMock:        nil,
 	}
 
 	(*UserController).SetService(&mock)

@@ -2,6 +2,7 @@ package users
 
 import (
 	"errors"
+	"fmt"
 	"github.com/seuc-frp-utn/api/application"
 	"github.com/seuc-frp-utn/api/auth"
 	"reflect"
@@ -32,7 +33,8 @@ func (s Service) SetRepository(repository *application.IRepository) error {
 }
 
 func (s Service) Create(entity reflect.Value) (interface{}, error) {
-	userCreate, ok := reflect.ValueOf(entity).Interface().(UserCreate)
+	fmt.Println("CreateUser: ", entity)
+	userCreate, ok := entity.Interface().(UserCreate)
 	if !ok {
 		return nil, errors.New("wrong format")
 	}
@@ -85,7 +87,7 @@ func (s Service) Remove(uuid string) (interface{}, error) {
 }
 
 func (s Service) Update(uuid string, entity reflect.Value) (interface{}, error) {
-	userUpdate, ok := reflect.ValueOf(entity).Interface().(UserUpdate)
+	userUpdate, ok := entity.Interface().(UserUpdate)
 	if !ok {
 		return nil, errors.New("wrong format")
 	}

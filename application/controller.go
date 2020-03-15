@@ -101,15 +101,27 @@ func (c *Controller) Update(typeOf interface{}) gin.HandlerFunc  {
 	return func(ctx *gin.Context) {
 		uuid := ctx.Param("uuid")
 
-		v := reflect.New(reflect.TypeOf(typeOf))
+		t := reflect.TypeOf(typeOf)
 
-		if err := ctx.ShouldBindJSON(v.Interface()); err != nil {
+		if t.Kind() != reflect.Struct {
+			ctx.AbortWithError(http.StatusInternalServerError, errors.New("input body is not a struct"))
+			return
+		}
+
+		var body map[string]interface{}
+		if err := ctx.BindJSON(&body); err != nil {
 			ctx.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
 
-		result, err := (*c.service).Update(uuid, v.Elem())
+		entity := reflect.Indirect(reflect.New(t))
+		if !entity.CanAddr() {
+			ctx.AbortWithError(http.StatusInternalServerError, errors.New("not addressable"))
+		}
 
+		entity = utils.FillStruct(entity, body)
+
+		result, err := (*c.service).Update(uuid, entity)
 		if err != nil {
 			ctx.AbortWithError(http.StatusInternalServerError, err)
 			return
