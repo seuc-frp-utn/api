@@ -27,7 +27,7 @@ func EncodeUUID(uuid string) string {
 
 // GenerateNanoUUID generates a user-friendly UUID of length 8.
 func GenerateNanoUUID() (string, error) {
-	uuid, err := nanoid.Nanoid(8)
+	uuid, err := nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 8)
 	if err != nil {
 		return "", err
 	}
