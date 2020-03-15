@@ -52,6 +52,7 @@ func (s Service) Create(entity reflect.Value) (interface{}, error) {
 		Email:      userCreate.Password,
 		Birthday:   userCreate.Birthday,
 		Password:   hash,
+		DNI:		userCreate.DNI,
 	}
 
 	result, err := (*s.repository).Create(user)
@@ -130,6 +131,14 @@ func (s Service) Update(uuid string, entity reflect.Value) (interface{}, error) 
 
 	if userUpdate.Birthday != nil {
 		user.Birthday = *userUpdate.Birthday
+	}
+
+	if userUpdate.Role != nil {
+		user.Role = *userUpdate.Role
+	}
+
+	if userUpdate.DNI != nil {
+		user.DNI = *userUpdate.DNI
 	}
 
 	result, err := (*s.repository).Update(uuid, user)

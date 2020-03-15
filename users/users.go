@@ -46,6 +46,7 @@ func addTestData() {
 		Birthday:   time.Time{},
 		Password:   password,
 		Role:       roles.ADMIN|roles.USER|roles.TEACHER,
+		DNI:		22476549,
 	}
 
 	userUUID := auth.GenerateUUID()
@@ -59,6 +60,7 @@ func addTestData() {
 		Birthday:   time.Time{},
 		Password:   userPassword,
 		Role:       roles.USER,
+		DNI:		35457889,
 	}
 
 	if userRepository != nil {

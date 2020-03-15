@@ -17,6 +17,7 @@ type User struct {
 	Birthday time.Time `json:"birthday"`
 	Password *string `json:"-"`
 	Role roles.Role `json:"role"`
+	DNI int64	`json:"dni"`
 }
 
 func (u User) Fullname() string {
@@ -33,6 +34,7 @@ type UserCreate struct {
 	Email string `json:"email"`
 	Birthday time.Time `json:"birthday"`
 	Password string `json:"password"`
+	DNI int64	`json:"dni"`
 }
 
 type UserUpdate struct {
@@ -43,4 +45,5 @@ type UserUpdate struct {
 	Birthday *time.Time `json:"birthday"`
 	Password *string `json:"password"`
 	Role *roles.Role `json:"role"`
+	DNI *int64	`json:"dni"`
 }
