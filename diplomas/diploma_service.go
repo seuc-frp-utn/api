@@ -55,8 +55,11 @@ func (s Service) Create(entity reflect.Value) (interface{}, error) {
 		return nil, errors.New("invalid secretary")
 	}
 
-	var err error
+	if !auth.IsUUID(diplomaCreate.Student) {
+		return nil, errors.New("invalid student")
+	}
 
+	var err error
 	_, err = (*courses.CourseService).Get(diplomaCreate.Course)
 	if err != nil {
 		return nil, err
@@ -77,6 +80,11 @@ func (s Service) Create(entity reflect.Value) (interface{}, error) {
 		return nil, err
 	}
 
+	_, err = (*users.UserService).Get(diplomaCreate.Student)
+	if err != nil {
+		return nil, err
+	}
+
 
 	token, err := auth.GenerateNanoUUID()
 	if err != nil {
@@ -90,6 +98,7 @@ func (s Service) Create(entity reflect.Value) (interface{}, error) {
 		Dean:      diplomaCreate.Dean,
 		Secretary: diplomaCreate.Secretary,
 		Teacher:   diplomaCreate.Teacher,
+		Student:   diplomaCreate.Student,
 	}
 
 	result, err := (*s.repository).Create(diploma)
@@ -135,8 +144,10 @@ func (s Service) Update(uuid string, entity reflect.Value) (interface{}, error) 
 		return nil, errors.New("diploma does not exist")
 	}
 	diploma, ok := found.(Diploma)
-
 	if diplomaUpdate.Course != nil {
+		if !auth.IsUUID(*diplomaUpdate.Course) {
+			return nil, errors.New("invalid course")
+		}
 		_, err = (*courses.CourseService).Get(*diplomaUpdate.Course)
 		if err != nil {
 			return nil, err
@@ -145,6 +156,9 @@ func (s Service) Update(uuid string, entity reflect.Value) (interface{}, error) 
 	}
 
 	if diplomaUpdate.Teacher != nil {
+		if !auth.IsUUID(*diplomaUpdate.Teacher) {
+			return nil, errors.New("invalid teacher")
+		}
 		_, err = (*users.UserService).Get(*diplomaUpdate.Teacher)
 		if err != nil {
 			return nil, err
@@ -153,6 +167,9 @@ func (s Service) Update(uuid string, entity reflect.Value) (interface{}, error) 
 	}
 
 	if diplomaUpdate.Secretary != nil {
+		if !auth.IsUUID(*diplomaUpdate.Secretary) {
+			return nil, errors.New("invalid secretary")
+		}
 		_, err = (*users.UserService).Get(*diplomaUpdate.Secretary)
 		if err != nil {
 			return nil, err
@@ -161,12 +178,27 @@ func (s Service) Update(uuid string, entity reflect.Value) (interface{}, error) 
 	}
 
 	if diplomaUpdate.Dean != nil {
+		if !auth.IsUUID(*diplomaUpdate.Dean) {
+			return nil, errors.New("invalid dean")
+		}
 		_, err = (*users.UserService).Get(*diplomaUpdate.Dean)
 		if err != nil {
 			return nil, err
 		}
 		diploma.Dean = *diplomaUpdate.Dean
 	}
+
+	if diplomaUpdate.Student != nil {
+		if !auth.IsUUID(*diplomaUpdate.Student) {
+			return nil, errors.New("invalid student")
+		}
+		_, err = (*users.UserService).Get(*diplomaUpdate.Student)
+		if err != nil {
+			return nil, err
+		}
+		diploma.Student = *diplomaUpdate.Student
+	}
+
 
 
 	result, err := (*s.repository).Update(uuid, diploma)

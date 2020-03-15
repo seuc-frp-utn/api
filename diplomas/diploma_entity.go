@@ -10,6 +10,7 @@ type Diploma struct {
 	Dean string `json:"dean"`
 	Secretary string `json:"secretary"`
 	Teacher string `json:"teacher"`
+	Student string `json:"student"`
 }
 
 type DiplomaCreate struct {
@@ -17,6 +18,7 @@ type DiplomaCreate struct {
 	Dean string `json:"dean"`
 	Secretary string `json:"secretary"`
 	Teacher string `json:"teacher"`
+	Student string `json:"student"`
 }
 
 type DiplomaUpdate struct {
@@ -24,4 +26,5 @@ type DiplomaUpdate struct {
 	Dean *string `json:"dean"`
 	Secretary *string `json:"secretary"`
 	Teacher *string `json:"teacher"`
+	Student *string `json:"student"`
 }
