@@ -45,7 +45,7 @@ func (r Repository) Create(entity interface{}) (interface{}, error) {
 	return &course, nil
 }
 
-func (r Repository) Read(uuid string) (interface{}, error) {
+func (r Repository) Get(uuid string) (interface{}, error) {
 	var course Course
 	if err := r.db.Model(&Course{}).First(&course).Where("uuid = ?", uuid).Error; err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (r Repository) Read(uuid string) (interface{}, error) {
 	return &course, nil
 }
 
-func (r Repository) ReadAll() (interface{}, error) {
+func (r Repository) GetAll() (interface{}, error) {
 	var courses []Course
 	if err := r.db.Model(&Course{}).Find(&courses).Error; err != nil {
 		return nil, err

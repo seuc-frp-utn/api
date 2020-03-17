@@ -73,7 +73,7 @@ func (s Service) Create(entity reflect.Value) (interface{}, error) {
 }
 
 func (s Service) Get(uuid string) (interface{}, error) {
-	result, err := (*s.repository).Read(uuid)
+	result, err := (*s.repository).Get(uuid)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (s Service) Get(uuid string) (interface{}, error) {
 }
 
 func (s Service) GetAll() (interface{}, error) {
-	result, err := (*s.repository).ReadAll()
+	result, err := (*s.repository).GetAll()
 	if err != nil {
 		return nil, err
 	}
