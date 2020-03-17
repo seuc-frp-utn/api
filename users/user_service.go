@@ -2,7 +2,6 @@ package users
 
 import (
 	"errors"
-	"fmt"
 	"github.com/seuc-frp-utn/api/application"
 	"github.com/seuc-frp-utn/api/auth"
 	"reflect"
@@ -33,7 +32,6 @@ func (s Service) SetRepository(repository *application.IRepository) error {
 }
 
 func (s Service) Create(entity reflect.Value) (interface{}, error) {
-	fmt.Println("CreateUser: ", entity)
 	userCreate, ok := entity.Interface().(UserCreate)
 	if !ok {
 		return nil, errors.New("wrong format")
