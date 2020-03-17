@@ -73,11 +73,18 @@ func (r Repository) Update(uuid string, entity interface{}) (interface{}, error)
 }
 
 func (r Repository) Remove(uuid string) (interface{}, error) {
-	var course Course
-	if err := r.db.Model(&Course{}).Where("uuid = ?").Delete(&course).Error; err != nil {
+	found, err := r.Read(uuid)
+	if err != nil {
 		return nil, err
 	}
-	return &course, nil
+	course, ok := found.(*Course)
+	if !ok {
+		return nil, errors.New("wrong format")
+	}
+	if err := r.db.Delete(course).Error; err != nil {
+		return nil, err
+	}
+	return course, nil
 }
 
 func (r Repository) Find(field string, value interface{}) (interface{}, error) {

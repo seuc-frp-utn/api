@@ -11,10 +11,25 @@ import (
 type IController interface {
 	GetService() (*IService, error)
 	SetService(service *IService) error
+}
+
+type IControllerCreate interface {
 	Create(typeOf interface{}) gin.HandlerFunc
+}
+
+type IControllerGet interface {
 	Get(ctx *gin.Context)
+}
+
+type IControllerGetAll interface {
 	GetAll(ctx *gin.Context)
+}
+
+type IControllerUpdate interface {
 	Update(typeOf interface{}) gin.HandlerFunc
+}
+
+type IControllerRemove interface {
 	Remove(ctx *gin.Context)
 }
 
@@ -134,7 +149,7 @@ func (c *Controller) Update(typeOf interface{}) gin.HandlerFunc  {
 func (c *Controller) Remove(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 
-	result, err := (*c.service).Get(uuid)
+	result, err := (*c.service).Remove(uuid)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
