@@ -16,17 +16,13 @@ var (
 	userRepository *application.IRepository
 )
 
-func initialize(test bool) {
+func initialize() {
 	userRepository = NewRepository(database.Db)
 	UserService = NewService(userRepository)
 	UserController = application.NewController(UserService)
 	err := database.Migrate(database.Db, User{})
 	if err != nil {
 		panic(err)
-	}
-	if test {
-		dropTable()
-		addTestData()
 	}
 }
 
@@ -75,7 +71,7 @@ func addTestData() {
 }
 
 func Register(group *gin.RouterGroup) *gin.RouterGroup {
-	initialize(true)
+	initialize()
 	group.Use(middlewares.JWT)
 	{
 		group.GET("/:uuid", middlewares.UUID, middlewares.Roles(roles.USER|roles.OPERATOR|roles.ADMIN), (*UserController).Get)
@@ -88,7 +84,9 @@ func Register(group *gin.RouterGroup) *gin.RouterGroup {
 }
 
 func RegisterDirectTest(group *gin.RouterGroup) *gin.RouterGroup {
-	initialize(true)
+	initialize()
+	dropTable()
+	addTestData()
 	group.GET("/:uuid", (*UserController).Get)
 	group.GET("/", (*UserController).GetAll)
 	group.POST("/", (*UserController).Create(UserCreate{}))
@@ -99,7 +97,9 @@ func RegisterDirectTest(group *gin.RouterGroup) *gin.RouterGroup {
 }
 
 func RegisterTestJWT(group *gin.RouterGroup) *gin.RouterGroup {
-	initialize(true)
+	initialize()
+	dropTable()
+	addTestData()
 	group.Use(middlewares.JWT)
 	{
 		group.GET("/:uuid", (*UserController).Get)
@@ -112,7 +112,9 @@ func RegisterTestJWT(group *gin.RouterGroup) *gin.RouterGroup {
 }
 
 func RegisterTestRoles(group *gin.RouterGroup) *gin.RouterGroup {
-	initialize(true)
+	initialize()
+	dropTable()
+	addTestData()
 	group.GET("/:uuid", middlewares.Roles(roles.USER|roles.OPERATOR|roles.ADMIN), (*UserController).Get)
 	group.GET("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).GetAll)
 	group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Create(UserCreate{}))

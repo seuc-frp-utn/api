@@ -45,7 +45,7 @@ func SetupDatabase() {
 
 	var err error
 	if Db, err = NewPostgresDb(config); err != nil {
-		panic("error setting database up")
+		panic(fmt.Sprintf("[FATAL] Error setting up database: %v", err))
 	}
 	Db.LogMode(false)
 }
@@ -54,7 +54,7 @@ func SetupDatabaseTests() {
 	var err error
 	path := os.Getenv("DB_TEST_PATH")
 	if Db, err = NewSqliteDb(path); err != nil {
-		panic("error setting test database up")
+		panic(fmt.Sprintf("[FATAL] Error setting up database: %v", err))
 	}
 	Db.LogMode(true)
 }
@@ -62,7 +62,7 @@ func SetupDatabaseTests() {
 // New open a new database connection
 func NewPostgresDb(config Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
-		"host=%s port=%d user=%s dbname=%s password=%s",
+		"host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
 		config.Host,
 		config.Port,
 		config.User,
