@@ -2,8 +2,8 @@ package users
 
 import (
 	"errors"
-	"github.com/seuc-frp-utn/api/application"
-	"github.com/seuc-frp-utn/api/auth"
+	"github.com/seuc-frp-utn/api/pkg/application"
+	"github.com/seuc-frp-utn/api/pkg/auth"
 	"reflect"
 )
 

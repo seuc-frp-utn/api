@@ -1,7 +1,7 @@
 package courses
 
 import (
-	"github.com/seuc-frp-utn/api/database"
+	"github.com/seuc-frp-utn/api/pkg/database"
 	"os"
 	"testing"
 )

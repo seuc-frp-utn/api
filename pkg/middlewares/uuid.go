@@ -3,7 +3,7 @@ package middlewares
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/seuc-frp-utn/api/auth"
+	"github.com/seuc-frp-utn/api/pkg/auth"
 	"net/http"
 )
 

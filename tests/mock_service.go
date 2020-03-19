@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"github.com/seuc-frp-utn/api/application"
+	"github.com/seuc-frp-utn/api/pkg/application"
 	"reflect"
 )
 

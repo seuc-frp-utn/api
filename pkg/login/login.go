@@ -3,8 +3,8 @@ package login
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/seuc-frp-utn/api/auth"
-	"github.com/seuc-frp-utn/api/users"
+	"github.com/seuc-frp-utn/api/pkg/auth"
+	"github.com/seuc-frp-utn/api/pkg/users"
 	"net/http"
 )
 

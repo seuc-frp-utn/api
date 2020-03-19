@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"github.com/seuc-frp-utn/api/application"
+	"github.com/seuc-frp-utn/api/pkg/application"
 )
 
 type Repository struct {

@@ -2,10 +2,10 @@ package diplomas
 
 import (
 	"errors"
-	"github.com/seuc-frp-utn/api/application"
-	"github.com/seuc-frp-utn/api/auth"
-	"github.com/seuc-frp-utn/api/courses"
-	"github.com/seuc-frp-utn/api/users"
+	"github.com/seuc-frp-utn/api/pkg/application"
+	"github.com/seuc-frp-utn/api/pkg/auth"
+	"github.com/seuc-frp-utn/api/pkg/courses"
+	"github.com/seuc-frp-utn/api/pkg/users"
 	"reflect"
 )
 

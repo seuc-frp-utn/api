@@ -3,7 +3,7 @@ package users
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
-	"github.com/seuc-frp-utn/api/roles"
+	"github.com/seuc-frp-utn/api/pkg/roles"
 	"time"
 )
 

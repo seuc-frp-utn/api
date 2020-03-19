@@ -14,11 +14,11 @@ RUN go mod download
 COPY . .
 
 ## Build application
-RUN CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o api .
+RUN CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o api ./cmd/app
 
 ## Move binary file to dist
 WORKDIR /dist
-RUN cp /build/cmd/app .
+RUN cp /build/cmd/app/api .
 RUN mkdir /data
 
 #####################################################################

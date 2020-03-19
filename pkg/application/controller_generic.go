@@ -3,7 +3,7 @@ package application
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/seuc-frp-utn/api/utils"
+	"github.com/seuc-frp-utn/api/pkg/utils"
 	"net/http"
 	"reflect"
 )

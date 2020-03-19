@@ -2,11 +2,11 @@ package users
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/seuc-frp-utn/api/application"
-	"github.com/seuc-frp-utn/api/auth"
-	"github.com/seuc-frp-utn/api/database"
-	"github.com/seuc-frp-utn/api/middlewares"
-	"github.com/seuc-frp-utn/api/roles"
+	"github.com/seuc-frp-utn/api/pkg/application"
+	"github.com/seuc-frp-utn/api/pkg/auth"
+	"github.com/seuc-frp-utn/api/pkg/database"
+	"github.com/seuc-frp-utn/api/pkg/middlewares"
+	"github.com/seuc-frp-utn/api/pkg/roles"
 	"time"
 )
 

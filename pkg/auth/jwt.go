@@ -3,7 +3,7 @@ package auth
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/seuc-frp-utn/api/roles"
+	"github.com/seuc-frp-utn/api/pkg/roles"
 	"os"
 	"strings"
 	"time"
