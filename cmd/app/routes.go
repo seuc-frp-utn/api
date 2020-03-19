@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/seuc-frp-utn/api/courses"
-	"github.com/seuc-frp-utn/api/diplomas"
-	"github.com/seuc-frp-utn/api/login"
-	"github.com/seuc-frp-utn/api/users"
+	"github.com/seuc-frp-utn/api/pkg/courses"
+	"github.com/seuc-frp-utn/api/pkg/diplomas"
+	"github.com/seuc-frp-utn/api/pkg/login"
+	"github.com/seuc-frp-utn/api/pkg/users"
 )
 
 func registerRoutes(group *gin.RouterGroup) *gin.RouterGroup {

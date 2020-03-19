@@ -1,6 +1,6 @@
 # Builder
 FROM golang:1.13.5 AS builder
-LABEL maintainer="Marcos Huck <marcos@huck.com.ar>"
+LABEL maintainer="Secretaria de Extension Universitaria y Cultura <extension@frp.utn.edu.ar>"
 
 ## Enable go modules
 ENV GO111MODULE=on \
@@ -18,7 +18,7 @@ RUN CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o api .
 
 ## Move binary file to dist
 WORKDIR /dist
-RUN cp /build/api .
+RUN cp /build/cmd/app .
 RUN mkdir /data
 
 #####################################################################

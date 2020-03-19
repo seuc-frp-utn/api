@@ -1,6 +1,6 @@
 package main
 
-import "github.com/seuc-frp-utn/api/database"
+import "github.com/seuc-frp-utn/api/pkg/database"
 
 func main() {
 	database.SetupDatabase()
