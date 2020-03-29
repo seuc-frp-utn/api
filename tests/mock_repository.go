@@ -7,12 +7,12 @@ import (
 type MockRepository struct {
 	GetDatabaseMock func() (*gorm.DB, error)
 	SetDatabaseMock func(db *gorm.DB) error
-	CreateMock func(entity interface{}) (interface{}, error)
-	ReadMock func(uuid string) (interface{}, error)
-	ReadAllMock func() (interface{}, error)
-	UpdateMock func(uuid string, entity interface{}) (interface{}, error)
-	RemoveMock func(uuid string) (interface{}, error)
-	FindMock func(field string, value interface{}) (interface{}, error)
+	CreateMock      func(entity interface{}) (interface{}, error)
+	GetMock         func(uuid string) (interface{}, error)
+	GetAllMock      func() (interface{}, error)
+	UpdateMock      func(uuid string, entity interface{}) (interface{}, error)
+	RemoveMock      func(uuid string) (interface{}, error)
+	FindMock        func(field string, value interface{}) (interface{}, error)
 }
 
 func (s MockRepository) GetDatabase() (*gorm.DB, error) {
@@ -27,12 +27,12 @@ func (s MockRepository) Create(entity interface{}) (interface{}, error) {
 	return s.CreateMock(entity)
 }
 
-func (s MockRepository) Read(uuid string) (interface{}, error) {
-	return s.ReadMock(uuid)
+func (s MockRepository) Get(uuid string) (interface{}, error) {
+	return s.GetMock(uuid)
 }
 
-func (s MockRepository) ReadAll() (interface{}, error) {
-	return s.ReadAllMock()
+func (s MockRepository) GetAll() (interface{}, error) {
+	return s.GetAllMock()
 }
 
 func (s MockRepository) Remove(uuid string) (interface{}, error) {

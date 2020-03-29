@@ -3,7 +3,7 @@ module github.com/seuc-frp-utn/api
 go 1.13
 
 require (
-	github.com/appleboy/gin-jwt/v2 v2.6.3
+	github.com/appleboy/gin-jwt/v2 v2.6.3 // indirect
 	github.com/btcsuite/btcutil v1.0.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/cors v1.3.1
