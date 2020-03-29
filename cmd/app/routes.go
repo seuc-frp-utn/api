@@ -5,6 +5,7 @@ import (
 	"github.com/seuc-frp-utn/api/pkg/courses"
 	"github.com/seuc-frp-utn/api/pkg/diplomas"
 	"github.com/seuc-frp-utn/api/pkg/login"
+	"github.com/seuc-frp-utn/api/pkg/payments"
 	"github.com/seuc-frp-utn/api/pkg/users"
 )
 
@@ -41,9 +42,9 @@ func registerRoutes(group *gin.RouterGroup) *gin.RouterGroup {
 		//////////////////////////////////////////////////
 		// Payments routes
 		//////////////////////////////////////////////////
-		payments := v1.Group("/payments")
+		paymentsGroup := v1.Group("/payments")
 		{
-			payments.GET("/")
+			payments.Register(paymentsGroup)
 		}
 		//////////////////////////////////////////////////
 		// Authentication routes

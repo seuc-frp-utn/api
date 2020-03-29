@@ -28,7 +28,7 @@ func Register(group *gin.RouterGroup) *gin.RouterGroup {
 	initialize()
 	group.Use(middlewares.JWT)
 	{
-		group.GET("/:uuid", middlewares.UUID, middlewares.Roles(roles.USER|roles.OPERATOR|roles.ADMIN), (*PaymentController).Get)
+		group.GET("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*PaymentController).Get)
 		group.GET("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*PaymentController).GetAll)
 		group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*PaymentController).Create(PaymentCreate{}))
 		group.PUT("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*PaymentController).Update(PaymentUpdate{}))
