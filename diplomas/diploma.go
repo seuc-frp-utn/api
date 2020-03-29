@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	DiplomaController *application.IController
+	DiplomaController *IController
 	DiplomaService *application.IService
 	diplomaRepository *application.IRepository
 )
@@ -17,7 +17,7 @@ var (
 func initialize() {
 	diplomaRepository = NewRepository(database.Db)
 	DiplomaService = NewService(diplomaRepository)
-	DiplomaController = application.NewController(DiplomaService)
+	DiplomaController = NewController(DiplomaService)
 	err := database.Migrate(database.Db, Diploma{})
 	if err != nil {
 		panic(err)
@@ -28,6 +28,7 @@ func Register(group *gin.RouterGroup) *gin.RouterGroup {
 	initialize()
 	group.GET("/:uuid", middlewares.UUID, (*DiplomaController).Get)
 	group.GET("/", (*DiplomaController).GetAll)
+	group.GET("/:uuid/token", (*DiplomaController).Find)
 	group.Use(middlewares.JWT)
 	{
 		group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*DiplomaController).Create(DiplomaCreate{}))

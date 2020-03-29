@@ -97,49 +97,29 @@ func (s Service) Remove(uuid string) (interface{}, error) {
 }
 
 func (s Service) Update(uuid string, entity reflect.Value) (interface{}, error) {
-	courseUpdate, ok := reflect.ValueOf(entity).Interface().(CourseUpdate)
+	courseUpdate, ok := entity.Interface().(CourseUpdate)
 	if !ok {
 		return nil, errors.New("wrong format")
 	}
 
-	_, err := s.Get(uuid)
+	found, err := s.Get(uuid)
 	if err != nil {
 		return nil, errors.New("course does not exist")
 	}
 
-	course := Course{}
+	course, _ := found.(Course)
+	course.Name = courseUpdate.Name
+	course.Description = courseUpdate.Description
+	course.Image = courseUpdate.Image
+	course.Started = courseUpdate.Started
+	course.Finished = courseUpdate.Finished
+	course.Link = courseUpdate.Link
+	course.Hours = courseUpdate.Hours
+	course.Price = courseUpdate.Price
+	course.Classes = courseUpdate.Classes
 
-	if courseUpdate.Name != nil {
-		course.Name = *courseUpdate.Name
-	}
-	if courseUpdate.Description != nil {
-		course.Description = *courseUpdate.Description
-	}
-	if courseUpdate.Image != nil {
-		course.Image = *courseUpdate.Image
-	}
-	if courseUpdate.Started != nil {
-		course.Started = *courseUpdate.Started
-	}
-	if courseUpdate.Finished != nil {
-		course.Finished = *courseUpdate.Finished
-	}
-	if courseUpdate.Link != nil {
-		course.Link = *courseUpdate.Link
-	}
-	if courseUpdate.Hours != nil {
-		course.Hours = *courseUpdate.Hours
-	}
-	if courseUpdate.Price != nil {
-		course.Price = *courseUpdate.Price
-	}
-	if courseUpdate.Classes != nil {
-		course.Classes = *courseUpdate.Classes
-	}
-	if courseUpdate.Teacher != nil {
-		if _, err := (*users.UserService).Get(*courseUpdate.Teacher); err == nil {
-			course.Teacher = *courseUpdate.Teacher
-		}
+	if _, err := (*users.UserService).Get(courseUpdate.Teacher); err == nil {
+		course.Teacher = courseUpdate.Teacher
 	}
 
 	result, err := (*s.repository).Update(uuid, course)
