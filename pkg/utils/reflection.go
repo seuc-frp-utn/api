@@ -88,6 +88,12 @@ func FillStruct(v reflect.Value, payload map[string]interface{}) reflect.Value {
 				break
 			}
 			field.SetUint(parsed)
+		case reflect.Float32, reflect.Float64:
+			converted, ok := value.(float64)
+			if !ok {
+				break
+			}
+			field.SetFloat(converted)
 		default:
 			converted, ok := value.(map[string]interface{})
 			if !ok {

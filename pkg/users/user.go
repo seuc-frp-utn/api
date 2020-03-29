@@ -26,6 +26,19 @@ func initialize() {
 	}
 }
 
+func Register(group *gin.RouterGroup) *gin.RouterGroup {
+	initialize()
+	group.Use(middlewares.JWT)
+	{
+		group.GET("/:uuid", middlewares.UUID, middlewares.Roles(roles.USER|roles.OPERATOR|roles.ADMIN), (*UserController).Get)
+		group.GET("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).GetAll)
+		group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Create(UserCreate{}))
+		group.PUT("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Update(UserUpdate{}))
+		group.DELETE("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Remove)
+	}
+	return group
+}
+
 func dropTable() {
 	database.Drop(User{})
 }
@@ -68,19 +81,6 @@ func addTestData() {
 		db.Model(&User{}).Save(&admin)
 		db.Model(&User{}).Save(&user)
 	}
-}
-
-func Register(group *gin.RouterGroup) *gin.RouterGroup {
-	initialize()
-	group.Use(middlewares.JWT)
-	{
-		group.GET("/:uuid", middlewares.UUID, middlewares.Roles(roles.USER|roles.OPERATOR|roles.ADMIN), (*UserController).Get)
-		group.GET("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).GetAll)
-		group.POST("/", middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Create(UserCreate{}))
-		group.PUT("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Update(UserUpdate{}))
-		group.DELETE("/:uuid", middlewares.UUID, middlewares.Roles(roles.OPERATOR|roles.ADMIN), (*UserController).Remove)
-	}
-	return group
 }
 
 func RegisterDirectTest(group *gin.RouterGroup) *gin.RouterGroup {

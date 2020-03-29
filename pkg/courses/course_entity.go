@@ -11,7 +11,7 @@ type Course struct {
 	Started bool `json:"started"`
 	Finished bool `json:"finished"`
 	Hours uint64 `json:"hours"`
-	Price uint64 `json:"price"`
+	Price float64 `json:"price"`
 	Classes uint64 `json:"classes"`
 	Link string `json:"link"`
 	Teacher string `json:"teacher"`
@@ -24,7 +24,7 @@ type CourseCreate struct {
 	Started bool `json:"started"`
 	Finished bool `json:"finished"`
 	Hours uint64 `json:"hours"`
-	Price uint64 `json:"price"`
+	Price float64 `json:"price"`
 	Classes uint64 `json:"classes"`
 	Link string `json:"link"`
 	Teacher string `json:"teacher"`
@@ -37,7 +37,7 @@ type CourseUpdate struct {
 	Started bool `json:"started"`
 	Finished bool `json:"finished"`
 	Hours uint64 `json:"hours"`
-	Price uint64 `json:"price"`
+	Price float64 `json:"price"`
 	Classes uint64 `json:"classes"`
 	Link string `json:"link"`
 	Teacher string `json:"teacher"`
