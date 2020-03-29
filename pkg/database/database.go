@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"os"
@@ -44,7 +45,7 @@ func SetupDatabase() {
 	}
 
 	var err error
-	if Db, err = NewPostgresDb(config); err != nil {
+	if Db, err = NewMySQLDb(config); err != nil {
 		panic(fmt.Sprintf("[FATAL] Error setting up database: %v", err))
 	}
 	Db.LogMode(false)
@@ -77,10 +78,25 @@ func NewPostgresDb(config Config) (*gorm.DB, error) {
 	return db, nil
 }
 
+func NewMySQLDb(config Config) (*gorm.DB, error) {
+	// user:password@/dbname?charset=utf8&parseTime=True&loc=Local
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8", config.User, config.Password, config.Host, config.Port, config.Database)
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		return nil, err
+	}
+	return db,nil
+}
+
 func NewSqliteDb(path string) (*gorm.DB, error) {
 	db, err := gorm.Open("sqlite3", path)
 	if err != nil {
 		return nil, err
 	}
 	return db, nil
+}
+
+func Close() {
+	Db.Close()
 }

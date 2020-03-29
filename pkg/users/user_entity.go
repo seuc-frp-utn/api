@@ -45,5 +45,5 @@ type UserUpdate struct {
 	Birthday *time.Time `json:"birthday"`
 	Password *string `json:"password"`
 	Role *roles.Role `json:"role"`
-	DNI *int64	`json:"dni"`
+	DNI *uint64	`json:"dni"`
 }

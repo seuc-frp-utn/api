@@ -18,7 +18,7 @@ RUN CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' -o api ./cmd/app
 
 ## Move binary file to dist
 WORKDIR /dist
-RUN cp /build/cmd/app/api .
+RUN cp /build/api .
 RUN mkdir /data
 
 #####################################################################

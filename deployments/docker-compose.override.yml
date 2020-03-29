@@ -6,8 +6,10 @@ services:
       - 3000:3000
     env_file:
       - ../config/app.env
+    restart: always
   db:
     ports:
-      - 5432:5432
+      - 3306:3306
     env_file:
       - ../config/db.env
+    restart: always
